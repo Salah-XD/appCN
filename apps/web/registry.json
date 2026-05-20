@@ -1,0 +1,51 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "appcn",
+  "homepage": "https://appcn.dev",
+  "items": [
+    {
+      "name": "cn",
+      "type": "registry:lib",
+      "title": "cn",
+      "description": "Class name merge helper for NativeWind (clsx + tailwind-merge).",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/lib/cn.ts",
+          "type": "registry:lib",
+          "target": "lib/cn.ts"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:component",
+      "title": "Button",
+      "description": "Pressable with variants and a Reanimated press-scale.",
+      "dependencies": ["class-variance-authority", "react-native-reanimated"],
+      "registryDependencies": ["@appcn/cn"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/components/button.tsx",
+          "type": "registry:component",
+          "target": "components/ui/button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "stream-bubble",
+      "type": "registry:component",
+      "title": "Stream Bubble",
+      "description": "AI assistant message: thinking, token streaming, settle.",
+      "dependencies": ["react-native-reanimated"],
+      "registryDependencies": ["@appcn/cn"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/ai/stream-bubble.tsx",
+          "type": "registry:component",
+          "target": "components/ui/stream-bubble.tsx"
+        }
+      ]
+    }
+  ]
+}

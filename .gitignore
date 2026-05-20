@@ -1,0 +1,43 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# turbo
+.turbo
+
+# builds
+dist/
+build/
+.next/
+out/
+
+# expo
+.expo/
+*.tsbuildinfo
+apps/showcase/.expo/
+apps/showcase/android/
+apps/showcase/ios/
+web-build/
+expo-env.d.ts
+
+# generated registry output (built from source on deploy)
+apps/web/public/r/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
