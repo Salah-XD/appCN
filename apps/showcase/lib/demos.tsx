@@ -1,6 +1,21 @@
 import * as React from "react";
 import { View } from "react-native";
-import { Button, StreamBubble } from "@appcn/ui";
+import { Button, PromptInput, StreamBubble, VoiceWaveform } from "@appcn/ui";
+
+/** Demo wrapper: PromptInput that fakes a 1.5s streaming response on send. */
+function PromptInputDemo() {
+  const [streaming, setStreaming] = React.useState(false);
+  return (
+    <PromptInput
+      streaming={streaming}
+      onSend={() => {
+        setStreaming(true);
+        setTimeout(() => setStreaming(false), 1500);
+      }}
+      onStop={() => setStreaming(false)}
+    />
+  );
+}
 
 export type DemoCategory = "base" | "ai";
 
@@ -45,6 +60,28 @@ export const demos: Demo[] = [
     render: () => (
       <View className="w-full">
         <StreamBubble content="Hey! I'm appCN's streaming assistant bubble — watch me think for a moment, then stream this reply token by token, then settle into place." />
+      </View>
+    ),
+  },
+  {
+    slug: "voice-waveform",
+    title: "Voice Waveform",
+    description: "Animated listening visualization for voice / assistant UI.",
+    category: "ai",
+    render: () => (
+      <View className="w-full items-center">
+        <VoiceWaveform barCount={7} height={56} />
+      </View>
+    ),
+  },
+  {
+    slug: "prompt-input",
+    title: "Prompt Input",
+    description: "AI chat composer with an animated send / stop button.",
+    category: "ai",
+    render: () => (
+      <View className="w-full">
+        <PromptInputDemo />
       </View>
     ),
   },

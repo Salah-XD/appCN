@@ -46,6 +46,36 @@
           "target": "components/ui/stream-bubble.tsx"
         }
       ]
+    },
+    {
+      "name": "voice-waveform",
+      "type": "registry:component",
+      "title": "Voice Waveform",
+      "description": "Animated listening visualization for voice / assistant UI.",
+      "dependencies": ["react-native-reanimated"],
+      "registryDependencies": ["@appcn/cn"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/ai/voice-waveform.tsx",
+          "type": "registry:component",
+          "target": "components/ui/voice-waveform.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-input",
+      "type": "registry:component",
+      "title": "Prompt Input",
+      "description": "AI chat composer with an animated send / stop button.",
+      "dependencies": ["react-native-reanimated"],
+      "registryDependencies": ["@appcn/cn"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/ai/prompt-input.tsx",
+          "type": "registry:component",
+          "target": "components/ui/prompt-input.tsx"
+        }
+      ]
     }
   ]
 }

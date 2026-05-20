@@ -30,6 +30,24 @@ export const components: ComponentMeta[] = [
     sourcePath: "../../packages/ui/src/ai/stream-bubble.tsx",
     registryItem: "stream-bubble",
   },
+  {
+    slug: "voice-waveform",
+    title: "Voice Waveform",
+    description:
+      "An animated listening visualization for voice and AI assistant UI — staggered, slightly randomized bars.",
+    category: "ai",
+    sourcePath: "../../packages/ui/src/ai/voice-waveform.tsx",
+    registryItem: "voice-waveform",
+  },
+  {
+    slug: "prompt-input",
+    title: "Prompt Input",
+    description:
+      "An AI chat composer with an animated action button — muted when empty, primary to send, stop while streaming.",
+    category: "ai",
+    sourcePath: "../../packages/ui/src/ai/prompt-input.tsx",
+    registryItem: "prompt-input",
+  },
 ];
 
 export const componentMap: Record<string, ComponentMeta> = Object.fromEntries(
