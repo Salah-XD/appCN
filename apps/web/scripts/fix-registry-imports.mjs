@@ -16,9 +16,11 @@ import path from "node:path";
 
 const registryDir = path.resolve(process.cwd(), "public/r");
 
+// Rewrite any workspace-relative lib import (e.g. `../lib/cn`, `../lib/motion`)
+// to the consumer alias form (`@/lib/cn`). One rule covers every shared helper,
+// so new helpers don't need a new rule here.
 const replacements = [
-  [/from "\.\.\/lib\/cn"/g, 'from "@/lib/cn"'],
-  [/from "\.\/lib\/cn"/g, 'from "@/lib/cn"'],
+  [/from "(?:\.\.?\/)+lib\/([\w-]+)"/g, 'from "@/lib/$1"'],
 ];
 
 const files = (await readdir(registryDir)).filter((f) => f.endsWith(".json"));

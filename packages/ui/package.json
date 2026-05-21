@@ -22,11 +22,17 @@
     "tailwind-merge": "^2.6.0"
   },
   "peerDependencies": {
+    "expo-haptics": "*",
     "nativewind": ">=4",
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": "*",
     "react-native-reanimated": "*"
+  },
+  "peerDependenciesMeta": {
+    "expo-haptics": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@appcn/tsconfig": "workspace:*",
