@@ -62,8 +62,16 @@ npx shadcn@latest add https://appcn.dev/r/button.json
 - **Accessibility required:** `accessibilityRole`, labels, hit slop, and focus/press states on every
   interactive component.
 - **Portability (critical for copy-paste):** each component must be as self-contained as possible.
-  Shared helpers (e.g. `cn`) are declared as registry `dependencies` / `registryDependencies` so the
-  shadcn CLI pulls them in — never assume the consumer has appCN-internal modules.
+  Shared helpers (`cn`, `motion`, `haptics`) are declared as registry `dependencies` /
+  `registryDependencies` so the shadcn CLI pulls them in — never assume the consumer has
+  appCN-internal modules.
+- **Motion + haptics tokens:** reach for `../lib/motion` (`duration` / `easing` / `spring` /
+  `PRESS_SCALE`) and `../lib/haptics` (`haptic.*`) instead of hand-typed values — they're what
+  makes everything feel like one system.
+
+> **Read [`DESIGN.md`](./DESIGN.md) before authoring a component.** It's the taste layer:
+> the "one delight detail" rule, motion/variant conventions, the per-component file shape, and
+> the explicit "what NOT to do" list. CLAUDE.md is architecture; DESIGN.md is feel.
 
 ## Registry conventions
 
@@ -72,8 +80,8 @@ npx shadcn@latest add https://appcn.dev/r/button.json
   `apps/web/public/r/<name>.json`, served by the web app. `public/r/` is gitignored — generated on deploy.
 - **Import rewrite (important):** in-repo components import shared helpers relatively (`../lib/cn`) so
   the monorepo bundles. shadcn does NOT rewrite relative imports for consumers, so the post-build
-  script converts `../lib/cn` → `@/lib/cn` in the emitted JSON. New shared helpers need a matching
-  rule in `apps/web/scripts/fix-registry-imports.mjs`.
+  script converts `../lib/<name>` → `@/lib/<name>` in the emitted JSON. The rule is generic
+  (`apps/web/scripts/fix-registry-imports.mjs`), so any new `lib/*` helper is handled automatically.
 - Cross-references between items use the **namespaced** form (`registryDependencies: ["@appcn/cn"]`),
   installed via a consumer `components.json` registry entry `"@appcn": ".../r/{name}.json"`.
 - Naming: kebab-case (`stream-bubble`), one item per component. Base vs `ai` collection is reflected

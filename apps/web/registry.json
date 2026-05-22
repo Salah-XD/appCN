@@ -18,6 +18,34 @@
       ]
     },
     {
+      "name": "motion",
+      "type": "registry:lib",
+      "title": "motion",
+      "description": "Shared motion tokens — durations, easings, and spring presets.",
+      "dependencies": ["react-native-reanimated"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "haptics",
+      "type": "registry:lib",
+      "title": "haptics",
+      "description": "Safe expo-haptics wrapper — fire-and-forget, no-ops on web.",
+      "dependencies": ["expo-haptics"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/lib/haptics.ts",
+          "type": "registry:lib",
+          "target": "lib/haptics.ts"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:component",
       "title": "Button",
@@ -36,9 +64,9 @@
       "name": "stream-bubble",
       "type": "registry:component",
       "title": "Stream Bubble",
-      "description": "AI assistant message: thinking, token streaming, settle.",
+      "description": "AI assistant message: thinking, token streaming, tool chips, settle.",
       "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn"],
+      "registryDependencies": ["@appcn/cn", "@appcn/motion"],
       "files": [
         {
           "path": "../../packages/ui/src/ai/stream-bubble.tsx",
@@ -48,32 +76,47 @@
       ]
     },
     {
-      "name": "voice-waveform",
-      "type": "registry:component",
-      "title": "Voice Waveform",
-      "description": "Animated listening visualization for voice / assistant UI.",
-      "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn"],
-      "files": [
-        {
-          "path": "../../packages/ui/src/ai/voice-waveform.tsx",
-          "type": "registry:component",
-          "target": "components/ui/voice-waveform.tsx"
-        }
-      ]
-    },
-    {
       "name": "prompt-input",
       "type": "registry:component",
       "title": "Prompt Input",
-      "description": "AI chat composer with an animated send / stop button.",
+      "description": "AI composer: auto-grow, attachment chips, and a send button that morphs into a stop with a spinning ring.",
       "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn"],
+      "registryDependencies": ["@appcn/cn", "@appcn/motion", "@appcn/haptics"],
       "files": [
         {
           "path": "../../packages/ui/src/ai/prompt-input.tsx",
           "type": "registry:component",
           "target": "components/ui/prompt-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "reasoning-trace",
+      "type": "registry:component",
+      "title": "Reasoning Trace",
+      "description": "Collapsible chain-of-thought with a thinking shimmer that auto-collapses when the answer lands.",
+      "dependencies": ["react-native-reanimated"],
+      "registryDependencies": ["@appcn/cn", "@appcn/motion", "@appcn/haptics"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/ai/reasoning-trace.tsx",
+          "type": "registry:component",
+          "target": "components/ui/reasoning-trace.tsx"
+        }
+      ]
+    },
+    {
+      "name": "voice-waveform",
+      "type": "registry:component",
+      "title": "Voice Waveform",
+      "description": "Live mic visualizer that breathes when idle and shifts hue to the accent when active.",
+      "dependencies": ["react-native-reanimated"],
+      "registryDependencies": ["@appcn/cn", "@appcn/motion"],
+      "files": [
+        {
+          "path": "../../packages/ui/src/ai/voice-waveform.tsx",
+          "type": "registry:component",
+          "target": "components/ui/voice-waveform.tsx"
         }
       ]
     }
