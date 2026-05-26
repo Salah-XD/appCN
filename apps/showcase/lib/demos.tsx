@@ -140,6 +140,30 @@ export const demos: Demo[] = [
       </View>
     ),
   },
+  {
+    slug: "prompt-input",
+    title: "Prompt Input",
+    description:
+      "AI composer: auto-grow, attachments, send morphs into a stop with a spinning ring.",
+    category: "ai",
+    render: () => <PromptDemo />,
+  },
+  {
+    slug: "reasoning-trace",
+    title: "Reasoning Trace",
+    description:
+      "Collapsible chain-of-thought with a shimmer; auto-collapses when the answer lands.",
+    category: "ai",
+    render: () => <ReasoningDemo />,
+  },
+  {
+    slug: "voice-waveform",
+    title: "Voice Waveform",
+    description:
+      "Live mic visualizer; breathes when idle, shifts hue to the accent when active.",
+    category: "ai",
+    render: () => <WaveformDemo />,
+  },
 ];
 
 export const demoMap: Record<string, Demo> = Object.fromEntries(

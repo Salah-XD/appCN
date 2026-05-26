@@ -1,0 +1,79 @@
+name: Bug report
+description: Something in an appCN component doesn't work the way the docs say it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! Before you submit, please confirm:
+        - You've tried the latest version of `@appcn/ui` (or re-pulled the component via `npx shadcn add`).
+        - You've checked existing issues for duplicates.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is misbehaving?
+      options:
+        - Button
+        - StreamBubble
+        - PromptInput
+        - ReasoningTrace
+        - VoiceWaveform
+        - Other / cross-component
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear, concrete description. Include screenshots or a short screen recording if motion is involved — words rarely capture animation bugs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal repro — ideally an Expo Snack URL or a tiny example repo. Drive-by bug reports without repros are hard to act on.
+    validations:
+      required: true
+
+  - type: input
+    id: appcn-version
+    attributes:
+      label: "@appcn/ui version (or registry pull date)"
+      placeholder: "0.1.0 (npm) or 2026-05-26 (registry pull)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Versions of expo, react-native, nativewind, reanimated. Output of `npx expo-doctor` or `npx envinfo --system --binaries --npmPackages "react,react-native,expo,nativewind,react-native-reanimated"` is ideal.
+      render: shell
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - iOS device
+        - iOS simulator
+        - Android device
+        - Android emulator
+        - Web (Expo)
+    validations:
+      required: true

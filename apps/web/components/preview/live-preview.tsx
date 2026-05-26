@@ -1,0 +1,31 @@
+/**
+ * A small phone-frame holding a live iframe into the Expo showcase web build.
+ * Used on the landing — same rendering path as the docs Preview tab, so what
+ * you see here is what runs on the phone.
+ */
+export function LivePreview({
+  slug,
+  showcaseWebUrl,
+  className,
+  title,
+}: {
+  slug: string;
+  showcaseWebUrl: string;
+  className?: string;
+  /** Accessible iframe title (defaults to the slug). */
+  title?: string;
+}) {
+  const src = `${showcaseWebUrl}/c/${slug}`;
+  return (
+    <div className={"mx-auto w-full max-w-[320px] " + (className ?? "")}>
+      <div className="relative aspect-[9/19] overflow-hidden rounded-[2.25rem] border-[10px] border-zinc-800 bg-background shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)]">
+        <iframe
+          src={src}
+          title={title ?? `${slug} live preview`}
+          loading="lazy"
+          className="h-full w-full border-0"
+        />
+      </div>
+    </div>
+  );
+}

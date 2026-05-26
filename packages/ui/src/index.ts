@@ -16,3 +16,12 @@ export type { VoiceWaveformProps } from "./ai/voice-waveform";
 export { cn } from "./lib/cn";
 export { duration, easing, spring, PRESS_SCALE } from "./lib/motion";
 export { haptic } from "./lib/haptics";
+
+export type { ComponentMeta, PropDoc, ExampleDoc } from "./lib/meta";
+export {
+  buttonMeta,
+  streamBubbleMeta,
+  promptInputMeta,
+  voiceWaveformMeta,
+  reasoningTraceMeta,
+} from "./lib/meta";

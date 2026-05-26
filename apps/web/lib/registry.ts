@@ -1,68 +1,94 @@
+import {
+  buttonMeta,
+  promptInputMeta,
+  reasoningTraceMeta,
+  streamBubbleMeta,
+  voiceWaveformMeta,
+  type ComponentMeta,
+} from "@appcn/ui/lib/meta";
+
 export type Category = "base" | "ai";
 
-export type ComponentMeta = {
+export type ComponentEntry = {
   slug: string;
   title: string;
   description: string;
   category: Category;
   /** Source file, relative to the web app cwd (read at build time for the Code tab). */
   sourcePath: string;
-  /** The registry item name -> served at /r/<registryItem>.json */
+  /** The registry item name — served at /r/<registryItem>.json. */
   registryItem: string;
+  /** Typed docs payload: anatomy / delight / props / examples / a11y. */
+  meta: ComponentMeta;
 };
 
-export const components: ComponentMeta[] = [
+/** Single source of truth for all components surfaced on the docs site. */
+export const components: ComponentEntry[] = [
   {
     slug: "button",
-    title: "Button",
-    description:
-      "A pressable with variants and a Reanimated press-scale. Accessible by default.",
-    category: "base",
+    title: buttonMeta.title,
+    description: buttonMeta.description,
+    category: buttonMeta.category,
     sourcePath: "../../packages/ui/src/components/button.tsx",
     registryItem: "button",
+    meta: buttonMeta,
   },
   {
     slug: "stream-bubble",
-    title: "Stream Bubble",
-    description:
-      "The AI-native flagship. An assistant message that animates through thinking, token streaming, tool chips, and a settled final state.",
-    category: "ai",
+    title: streamBubbleMeta.title,
+    description: streamBubbleMeta.description,
+    category: streamBubbleMeta.category,
     sourcePath: "../../packages/ui/src/ai/stream-bubble.tsx",
     registryItem: "stream-bubble",
+    meta: streamBubbleMeta,
   },
   {
     slug: "prompt-input",
-    title: "Prompt Input",
-    description:
-      "The AI composer. Auto-grows with content and morphs its send button into a stop control wrapped in a spinning ring the moment generation starts.",
-    category: "ai",
+    title: promptInputMeta.title,
+    description: promptInputMeta.description,
+    category: promptInputMeta.category,
     sourcePath: "../../packages/ui/src/ai/prompt-input.tsx",
     registryItem: "prompt-input",
+    meta: promptInputMeta,
   },
   {
     slug: "reasoning-trace",
-    title: "Reasoning Trace",
-    description:
-      "A collapsible chain-of-thought panel. A shimmer sweeps the reasoning while thinking, then the panel collapses itself the instant the answer lands.",
-    category: "ai",
+    title: reasoningTraceMeta.title,
+    description: reasoningTraceMeta.description,
+    category: reasoningTraceMeta.category,
     sourcePath: "../../packages/ui/src/ai/reasoning-trace.tsx",
     registryItem: "reasoning-trace",
+    meta: reasoningTraceMeta,
   },
   {
     slug: "voice-waveform",
-    title: "Voice Waveform",
-    description:
-      "A live mic visualizer. It breathes with a slow envelope when idle and shifts hue to the accent the instant it goes active.",
-    category: "ai",
+    title: voiceWaveformMeta.title,
+    description: voiceWaveformMeta.description,
+    category: voiceWaveformMeta.category,
     sourcePath: "../../packages/ui/src/ai/voice-waveform.tsx",
     registryItem: "voice-waveform",
+    meta: voiceWaveformMeta,
   },
 ];
 
-export const componentMap: Record<string, ComponentMeta> = Object.fromEntries(
+export const componentMap: Record<string, ComponentEntry> = Object.fromEntries(
   components.map((c) => [c.slug, c])
 );
 
+/** The shadcn-by-URL form. Works without consumer setup. */
 export function installCommand(registryItem: string, base: string) {
   return `npx shadcn@latest add ${base}/${registryItem}.json`;
 }
+
+/** The namespaced shadcn form — requires the consumer to add `"@appcn"` to their components.json. */
+export function namespacedInstallCommand(registryItem: string) {
+  return `npx shadcn@latest add @appcn/${registryItem}`;
+}
+
+/** The npm form — installs the whole library. Available once `@appcn/ui` ships to npm (Phase 6). */
+export function npmInstallCommand() {
+  return `npm install @appcn/ui`;
+}
+
+/** Re-export for places that previously imported the type from this module. */
+export type { ComponentMeta };

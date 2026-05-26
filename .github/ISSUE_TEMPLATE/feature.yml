@@ -1,0 +1,37 @@
+name: Feature request
+description: Suggest an enhancement to an existing appCN component or to the docs / registry pipeline.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For **new components**, please use the "Component request" template instead.
+        This template is for tweaks to existing components or the surrounding tooling.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Lead with the user problem, not the proposed solution. The best features come from understanding the friction first.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Your idea. APIs, code snippets, before/after, anything concrete.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What else did you try / think about? Why is the proposal better?
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Which component(s) or area(s) does this touch?

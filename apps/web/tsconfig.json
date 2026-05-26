@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@appcn/ui/lib/*": ["../../packages/ui/src/lib/*"]
     }
   },
   "include": [

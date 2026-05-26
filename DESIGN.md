@@ -90,3 +90,56 @@ or text glyphs in shipped code.
 - ❌ Dependencies a copy-paste consumer won't have, unless declared in the registry.
 - ❌ Light-mode-first. ❌ Layout shift on mount. ❌ Spinners where a skeleton or stream fits.
 - ❌ Over-abstraction — three similar lines beat a premature hook.
+
+---
+
+## Component checklist (SOP)
+
+Every component ships these seven artifacts. The PR template enforces them. Skipping any one
+means the docs page won't render, the registry will be incomplete, or the showcase QR
+won't resolve — so don't.
+
+1. **`packages/ui/src/{components,ai}/<slug>.tsx`** — the component itself.
+   - Header doc comment names the delight detail in one line.
+   - NativeWind `className` only. Motion via `react-native-reanimated`, tokens from
+     `../lib/motion`. Haptics (where it fits) from `../lib/haptics`.
+   - Exports `<Name>Props` (interface) and `<Name>` (function). PascalCase.
+
+2. **`packages/ui/src/{components,ai}/<slug>.meta.ts`** — typed docs payload.
+   - `export const meta: ComponentMeta = { ... }`, satisfying the schema in
+     `packages/ui/src/lib/meta.ts` (`slug`, `title`, `category`, `description`,
+     `anatomy`, `delight`, `props`, `examples`, `a11y`).
+   - Mirror TSDoc on each prop into `props[].description` — single source of truth where
+     possible. At least two examples; the first is the canonical demo.
+
+3. **`packages/ui/src/index.ts`** — named re-exports for the component, its types, and
+   the meta:
+   ```ts
+   export { Foo } from "./components/foo";
+   export type { FooProps } from "./components/foo";
+   export { meta as fooMeta } from "./components/foo.meta";
+   ```
+
+4. **`apps/showcase/lib/demos.tsx`** — entry in the `demos` array. `slug` matches the
+   component's slug exactly so `/c/<slug>` resolves and the docs QR works.
+
+5. **`apps/web/lib/registry.ts`** — entry in the `components` array. The web `slug` /
+   `registryItem` match the shadcn item name.
+
+6. **`apps/web/registry.json`** — shadcn `items` entry with the right
+   `dependencies` (npm packages the component imports) and `registryDependencies`
+   (namespaced refs like `@appcn/cn`, `@appcn/motion`, `@appcn/haptics`). Path points at
+   `../../packages/ui/src/{components,ai}/<slug>.tsx`; target is `components/ui/<slug>.tsx`.
+
+7. **Verified** with this exact sequence — all four steps must pass:
+   ```bash
+   pnpm typecheck                       # ui + showcase + web all clean
+   pnpm registry:build                  # emits public/r/<slug>.json with rewritten imports
+   pnpm --filter showcase start         # /c/<slug> reachable from the index gallery
+   pnpm --filter @appcn/web dev         # /components/<slug> renders all docs sections
+   ```
+
+If a step fails, the component isn't done — even if the .tsx itself compiles.
+
+> Tip for agents: invoke the `/new-component` skill — it walks this checklist for you and
+> drops a `<slug>.meta.ts` template ready to fill out.

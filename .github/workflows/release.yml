@@ -1,0 +1,59 @@
+name: Release @appcn/ui
+
+# Manual only. Phase 6 must succeed locally first
+# (pnpm pack --dry-run, scratch-Expo install verified).
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'npm dist-tag (latest, next, beta…)'
+        required: true
+        default: 'latest'
+      dry-run:
+        description: 'Dry-run only (skip publish)'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write # required for npm OIDC trusted publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: npm-publish
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify package metadata
+        run: |
+          node -e "const pkg = require('./packages/ui/package.json'); if (pkg.private) { console.error('packages/ui still marked private'); process.exit(1); } console.log('Publishing', pkg.name, pkg.version);"
+
+      - name: Pack (always)
+        run: pnpm --filter @appcn/ui pack --pack-destination ./dist-tarball
+
+      - name: Inspect tarball
+        run: |
+          ls -la dist-tarball
+          tar -tzf dist-tarball/*.tgz | head -40
+
+      - name: Publish to npm
+        if: ${{ inputs.dry-run == false }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm --filter @appcn/ui publish --no-git-checks --tag ${{ inputs.tag }} --provenance --access public

@@ -1,0 +1,59 @@
+name: Component request
+description: Propose a new component for the appCN library.
+labels: ["component-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        appCN intentionally ships few components. The bar is taste, not count.
+        Every shipped component has one **delight detail** — a non-obvious
+        motion / haptic / behavior that earns its place. We won't merge a
+        component that's "the standard thing, but in NativeWind."
+
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      description: Kebab-case slug (e.g. "bottom-sheet", "ai-action-card").
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Base (broad mobile primitive)
+        - AI (featured AI-native collection)
+    validations:
+      required: true
+
+  - type: textarea
+    id: anatomy
+    attributes:
+      label: Anatomy
+      description: 2–4 sentences. What's it made of? When would you reach for it instead of an existing component?
+    validations:
+      required: true
+
+  - type: textarea
+    id: delight
+    attributes:
+      label: The delight detail (REQUIRED)
+      description: |
+        One non-obvious, unrequested touch — a squash on travel, a haptic at a threshold, a shimmer that matches content shape, an element that gets out of its own way. If you can't name it, the component isn't ready to propose.
+    validations:
+      required: true
+
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: Links to similar components in other libraries (RNR, Tamagui, gluestack, native iOS/Android, Linear, Vercel, etc.) — what do they do well? What do they miss?
+
+  - type: textarea
+    id: api
+    attributes:
+      label: Rough API
+      description: Props you envision. Don't overthink it.
+      render: tsx
