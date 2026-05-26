@@ -2,54 +2,139 @@ import * as React from "react";
 import { Link } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Animated, {
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
-import { demos } from "../lib/demos";
+import { demos, type Demo, type DemoCategory } from "../lib/demos";
+
+const PRESS_SPRING = { mass: 0.5, damping: 18, stiffness: 320 };
 
 export default function Gallery() {
+  const base = demos.filter((d) => d.category === "base");
+  const ai = demos.filter((d) => d.category === "ai");
+
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-5 pb-4 pt-2">
-        <Text className="text-4xl font-bold tracking-tight text-foreground">
-          appCN
-        </Text>
-        <Text className="mt-1 text-base text-muted-foreground">
-          Mobile components, copy-paste. Tap any to preview.
-        </Text>
-      </View>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 48 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="px-6 pb-6 pt-4">
+          <View className="flex-row items-center gap-2">
+            <BrandMark />
+            <Text className="text-3xl font-bold tracking-tight text-foreground">
+              app<Text className="text-primary">CN</Text>
+            </Text>
+          </View>
+          <Text className="mt-2 text-base text-muted-foreground">
+            Mobile components for modern apps. Tap any to preview.
+          </Text>
+        </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40, gap: 12 }}>
-        {demos.map((demo) => (
-          <Link key={demo.slug} href={`/c/${demo.slug}`} asChild>
-            <Pressable className="rounded-3xl border border-border bg-card p-4 active:opacity-80">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-lg font-semibold text-card-foreground">
-                  {demo.title}
-                </Text>
-                <View
-                  className={
-                    demo.category === "ai"
-                      ? "rounded-full bg-primary px-2.5 py-1"
-                      : "rounded-full bg-secondary px-2.5 py-1"
-                  }
-                >
-                  <Text
-                    className={
-                      demo.category === "ai"
-                        ? "text-xs font-semibold text-primary-foreground"
-                        : "text-xs font-semibold text-secondary-foreground"
-                    }
-                  >
-                    {demo.category === "ai" ? "AI" : "Base"}
-                  </Text>
-                </View>
-              </View>
-              <Text className="mt-1 text-sm text-muted-foreground">
-                {demo.description}
-              </Text>
-            </Pressable>
-          </Link>
-        ))}
+        <Section title="AI Collection" subtitle="The flagship.">
+          {ai.map((d, i) => (
+            <DemoCard key={d.slug} demo={d} index={i} />
+          ))}
+        </Section>
+
+        <Section title="Base" subtitle="Building blocks.">
+          {base.map((d, i) => (
+            <DemoCard key={d.slug} demo={d} index={ai.length + i} />
+          ))}
+        </Section>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function Section({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <View className="px-6 pt-6">
+      <View className="flex-row items-baseline justify-between">
+        <Text className="text-xs font-semibold uppercase tracking-[2px] text-muted-foreground">
+          {title}
+        </Text>
+        <Text className="text-xs text-muted-foreground/70">{subtitle}</Text>
+      </View>
+      <View className="mt-3 gap-2.5">{children}</View>
+    </View>
+  );
+}
+
+function DemoCard({ demo, index }: { demo: Demo; index: number }) {
+  const pressed = useSharedValue(0);
+  const style = useAnimatedStyle(() => ({
+    transform: [{ scale: withSpring(pressed.value ? 0.97 : 1, PRESS_SPRING) }],
+  }));
+
+  return (
+    <Animated.View entering={FadeInDown.duration(360).delay(index * 50)} style={style}>
+      <Link href={`/c/${demo.slug}`} asChild>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Preview ${demo.title}`}
+          onPressIn={() => {
+            pressed.value = 1;
+          }}
+          onPressOut={() => {
+            pressed.value = 0;
+          }}
+          className="overflow-hidden rounded-2xl border border-border bg-card/80 p-4"
+        >
+          <View className="flex-row items-center justify-between">
+            <Text className="text-lg font-semibold text-card-foreground">
+              {demo.title}
+            </Text>
+            <CategoryPill category={demo.category} />
+          </View>
+          <Text className="mt-1.5 text-sm leading-5 text-muted-foreground">
+            {demo.description}
+          </Text>
+        </Pressable>
+      </Link>
+    </Animated.View>
+  );
+}
+
+function CategoryPill({ category }: { category: DemoCategory }) {
+  if (category === "ai") {
+    return (
+      <View className="rounded-full bg-primary px-2.5 py-1">
+        <Text className="text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+          AI
+        </Text>
+      </View>
+    );
+  }
+  return (
+    <View className="rounded-full border border-border bg-secondary/50 px-2.5 py-1">
+      <Text className="text-[10px] font-bold uppercase tracking-wider text-secondary-foreground">
+        Base
+      </Text>
+    </View>
+  );
+}
+
+/** Tiny appCN mark — a stylized phone with motion. */
+function BrandMark() {
+  return (
+    <View className="h-9 w-9 items-center justify-center rounded-xl bg-primary">
+      <View className="h-5 w-3.5 rounded-[3px] border-[1.5px] border-primary-foreground">
+        <View className="absolute -right-1 top-1 h-[1.5px] w-2 bg-primary-foreground" />
+        <View className="absolute -right-1.5 top-[10px] h-[1.5px] w-2.5 bg-primary-foreground/70" />
+      </View>
+    </View>
   );
 }

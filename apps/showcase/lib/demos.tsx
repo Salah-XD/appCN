@@ -19,7 +19,20 @@ export type Demo = {
   render: () => React.ReactNode;
 };
 
-/** PromptInput with live generating + attachment state. */
+/** PromptInput with live generating + attachment state.
+ *
+ * Stock images cycle through `picsum.photos` so each click adds a different
+ * thumbnail to the chip. Deterministic seeds keep the same image stable
+ * across re-renders.
+ */
+const STOCK_IMAGES: { seed: string; label: string }[] = [
+  { seed: "appcn-mountain", label: "mountain.jpg" },
+  { seed: "appcn-coffee", label: "coffee.jpg" },
+  { seed: "appcn-studio", label: "studio.jpg" },
+  { seed: "appcn-portrait", label: "portrait.jpg" },
+  { seed: "appcn-city", label: "city.jpg" },
+];
+
 function PromptDemo() {
   const [generating, setGenerating] = React.useState(false);
   const [attachments, setAttachments] = React.useState<PromptAttachment[]>([]);
@@ -30,11 +43,17 @@ function PromptDemo() {
       <PromptInput
         generating={generating}
         attachments={attachments}
+        hint="⌘ + Enter to send"
         onAddAttachment={() => {
+          const next = STOCK_IMAGES[counter.current % STOCK_IMAGES.length];
           counter.current += 1;
           setAttachments((a) => [
             ...a,
-            { id: `f${counter.current}`, label: `file-${counter.current}.png` },
+            {
+              id: `f${counter.current}`,
+              label: next.label,
+              uri: `https://picsum.photos/seed/${next.seed}/80/80`,
+            },
           ]);
         }}
         onRemoveAttachment={(id) =>
@@ -134,6 +153,7 @@ export const demos: Demo[] = [
     render: () => (
       <View className="w-full">
         <StreamBubble
+          avatar="✦"
           tools={["Searched the web", "Read 3 sources"]}
           content="Hey! I'm appCN's streaming assistant bubble — watch me think for a moment, then stream this reply token by token, then settle into place."
         />

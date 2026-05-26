@@ -1,36 +1,83 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { cn } from "@/lib/utils";
+import { LogoWordmark } from "@/components/brand/logo";
+
+const NAV = [
+  { href: "/components", label: "Components" },
+  { href: "/components/stream-bubble", label: "AI", match: "/components/" },
+  { href: "https://github.com/your-org/appcn", label: "GitHub", external: true },
+];
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
+    <header
+      className={cn(
+        "sticky top-0 z-50 transition-all duration-300",
+        scrolled
+          ? "border-b border-border/60 bg-background/80 backdrop-blur-xl"
+          : "border-b border-transparent bg-background/30 backdrop-blur"
+      )}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
         <Link
           href="/"
-          className="flex items-center gap-2 text-[15px] font-semibold tracking-tight"
+          className="group inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+          aria-label="appCN home"
         >
-          <span className="grid h-7 w-7 place-items-center rounded-lg bg-primary font-bold text-primary-foreground">
-            a
+          <LogoWordmark size="default" className="text-foreground" />
+          <span className="hidden rounded-full border border-border/60 bg-card/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground sm:inline-block">
+            v0.1
           </span>
-          appCN
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-          <Link href="/components" className="transition-colors hover:text-foreground">
-            Components
-          </Link>
-          <Link
-            href="/components/stream-bubble"
-            className="transition-colors hover:text-foreground"
-          >
-            AI
-          </Link>
-          <a
-            href="https://github.com/your-org/appcn"
-            className="transition-colors hover:text-foreground"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub
-          </a>
+
+        <nav className="flex items-center gap-1 text-sm">
+          {NAV.map((item) => {
+            const active = item.match
+              ? pathname.startsWith(item.match)
+              : pathname === item.href;
+            if (item.external) {
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full px-3.5 py-1.5 text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
+                >
+                  {item.label}
+                </a>
+              );
+            }
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "rounded-full px-3.5 py-1.5 transition-colors",
+                  active
+                    ? "bg-card text-foreground"
+                    : "text-muted-foreground hover:bg-card hover:text-foreground"
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>

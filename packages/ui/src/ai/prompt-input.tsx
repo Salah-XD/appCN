@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  Image,
   Pressable,
   ScrollView,
   Text,
@@ -26,6 +27,8 @@ import { haptic } from "../lib/haptics";
 export interface PromptAttachment {
   id: string;
   label: string;
+  /** Optional image preview URI. When provided, the chip shows a thumbnail. */
+  uri?: string;
 }
 
 export interface PromptInputProps {
@@ -38,9 +41,11 @@ export interface PromptInputProps {
   onSubmit?: (text: string) => void;
   /** Called when the user taps the stop button while `generating`. */
   onStop?: () => void;
-  /** When true, the send button morphs into a stop with a spinning ring. */
+  /** When true, the send button morphs into a stop with a spinning arc. */
   generating?: boolean;
   placeholder?: string;
+  /** Optional hint shown below the input (e.g. "⌘+Enter to send"). */
+  hint?: string;
   /** Auto-grow bounds for the input (px). */
   minHeight?: number;
   maxHeight?: number;
@@ -55,8 +60,9 @@ export interface PromptInputProps {
 
 /**
  * appCN PromptInput — the AI composer. Auto-grows with content, holds optional
- * attachment chips, and (the delight detail) morphs its send button into a stop
- * control wrapped in a spinning progress ring the moment generation starts.
+ * attachment chips, glows on focus, and (the delight detail) morphs its send
+ * button into a stop control wrapped in a spinning gradient arc the moment
+ * generation starts.
  */
 export function PromptInput({
   value: valueProp,
@@ -66,6 +72,7 @@ export function PromptInput({
   onStop,
   generating = false,
   placeholder = "Message appCN…",
+  hint,
   minHeight = 24,
   maxHeight = 140,
   attachments,
@@ -82,6 +89,19 @@ export function PromptInput({
   const [focused, setFocused] = React.useState(false);
 
   const canSend = value.trim().length > 0 && !disabled;
+
+  // Focus glow: a subtle shadow + border-ring on focus.
+  const focusProgress = useSharedValue(0);
+  React.useEffect(() => {
+    focusProgress.value = withTiming(focused && !disabled ? 1 : 0, {
+      duration: duration.base,
+      easing: easing.standard,
+    });
+  }, [focused, disabled, focusProgress]);
+
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: focusProgress.value * 0.5,
+  }));
 
   const setValue = (text: string) => {
     if (!isControlled) setInternal(text);
@@ -114,65 +134,105 @@ export function PromptInput({
   };
 
   return (
-    <View
-      className={cn(
-        "rounded-3xl border bg-card px-2.5 py-2",
-        focused && !disabled ? "border-ring" : "border-border",
-        disabled && "opacity-60",
-        className
-      )}
-    >
-      {attachments && attachments.length > 0 ? (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className="mb-2"
-          contentContainerStyle={{ gap: 8, paddingHorizontal: 4 }}
+    <View className={className}>
+      <View className="relative">
+        {/* Focus glow — soft primary halo built from stacked tinted layers. */}
+        <Animated.View
+          aria-hidden
+          pointerEvents="none"
+          style={glowStyle}
+          className="absolute -inset-2 rounded-[28px] bg-primary/15"
+        />
+        <Animated.View
+          aria-hidden
+          pointerEvents="none"
+          style={glowStyle}
+          className="absolute -inset-1 rounded-[26px] bg-primary/20"
+        />
+
+        <View
+          className={cn(
+            "relative rounded-3xl border bg-card px-2.5 py-2",
+            focused && !disabled ? "border-ring" : "border-border",
+            disabled && "opacity-60"
+          )}
         >
-          {attachments.map((a) => (
-            <AttachmentChip
-              key={a.id}
-              attachment={a}
-              onRemove={onRemoveAttachment}
+          {attachments && attachments.length > 0 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="mb-2"
+              contentContainerStyle={{ gap: 8, paddingHorizontal: 4 }}
+            >
+              {attachments.map((a) => (
+                <AttachmentChip
+                  key={a.id}
+                  attachment={a}
+                  onRemove={onRemoveAttachment}
+                />
+              ))}
+            </ScrollView>
+          ) : null}
+
+          <View className="flex-row items-end gap-2">
+            {onAddAttachment ? (
+              <IconButton
+                accessibilityLabel="Add attachment"
+                onPress={onAddAttachment}
+                disabled={disabled}
+              >
+                <PlusGlyph />
+              </IconButton>
+            ) : null}
+
+            <TextInput
+              value={value}
+              onChangeText={setValue}
+              onContentSizeChange={handleContentSize}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder={placeholder}
+              placeholderTextColor="rgba(255,255,255,0.35)"
+              multiline
+              editable={!disabled}
+              // `outlineStyle: 'none'` + zero border kills both the default
+              // browser focus ring AND the subtle text-input border that
+              // react-native-web sometimes paints on multiline inputs. The
+              // parent container is the only border. No-op on iOS/Android.
+              style={[
+                {
+                  height,
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                  borderWidth: 0,
+                },
+                { outlineStyle: "none" } as object,
+              ]}
+              className="flex-1 self-center px-1 text-[15px] leading-5 text-foreground"
+              accessibilityLabel={placeholder}
             />
-          ))}
-        </ScrollView>
-      ) : null}
 
-      <View className="flex-row items-end gap-2">
-        {onAddAttachment ? (
-          <IconButton
-            accessibilityLabel="Add attachment"
-            onPress={onAddAttachment}
-            disabled={disabled}
-          >
-            <PlusIcon colorClassName="bg-secondary-foreground" />
-          </IconButton>
-        ) : null}
-
-        <TextInput
-          value={value}
-          onChangeText={setValue}
-          onContentSizeChange={handleContentSize}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          placeholder={placeholder}
-          multiline
-          editable={!disabled}
-          style={{ height, paddingTop: 0, paddingBottom: 0 }}
-          className="flex-1 self-center px-1 text-[15px] leading-5 text-foreground placeholder:text-muted-foreground"
-          accessibilityLabel={placeholder}
-        />
-
-        <SendButton
-          active={canSend}
-          generating={generating}
-          onPress={handleSend}
-        />
+            <SendButton
+              active={canSend}
+              generating={generating}
+              onPress={handleSend}
+            />
+          </View>
+        </View>
       </View>
+
+      {hint ? (
+        <View className="mt-2 px-1">
+          <Text className="text-xs text-muted-foreground">{hint}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
+
+/* ============================================================ */
+/* Send button — morph between arrow and stop, with arc sweep   */
+/* ============================================================ */
 
 function SendButton({
   active,
@@ -191,7 +251,7 @@ function SendButton({
   React.useEffect(() => {
     if (generating && !reduced) {
       rot.value = withRepeat(
-        withTiming(360, { duration: 900, easing: easing.linear }),
+        withTiming(360, { duration: 1100, easing: easing.linear }),
         -1,
         false
       );
@@ -210,25 +270,60 @@ function SendButton({
 
   const arrowStyle = useAnimatedStyle(() => ({
     opacity: withTiming(generating ? 0 : 1, { duration: duration.fast }),
-    transform: [{ scale: withTiming(generating ? 0.5 : 1, { duration: duration.fast }) }],
+    transform: [
+      { scale: withTiming(generating ? 0.5 : 1, { duration: duration.fast }) },
+    ],
   }));
 
   const stopStyle = useAnimatedStyle(() => ({
     opacity: withTiming(generating ? 1 : 0, { duration: duration.fast }),
-    transform: [{ scale: withTiming(generating ? 1 : 0.5, { duration: duration.fast }) }],
+    transform: [
+      { scale: withTiming(generating ? 1 : 0.5, { duration: duration.fast }) },
+    ],
   }));
 
-  const ringStyle = useAnimatedStyle(() => ({
+  // Two stacked arcs at different offsets create a gradient-feel sweep.
+  const arcAStyle = useAnimatedStyle(() => ({
     opacity: withTiming(generating ? 1 : 0, { duration: duration.fast }),
     transform: [{ rotate: `${rot.value}deg` }],
   }));
+  const arcBStyle = useAnimatedStyle(() => ({
+    opacity: withTiming(generating ? 0.7 : 0, { duration: duration.fast }),
+    transform: [{ rotate: `${rot.value + 140}deg` }],
+  }));
+
+  // Soft glow behind the button when enabled — pulls the eye to the action.
+  const glow = useAnimatedStyle(() => ({
+    opacity: withTiming(enabled ? 1 : 0, { duration: duration.base }),
+  }));
 
   return (
-    <Animated.View style={containerStyle}>
+    <Animated.View style={containerStyle} className="relative">
+      {/* Ambient primary glow when active */}
+      <Animated.View
+        aria-hidden
+        pointerEvents="none"
+        style={glow}
+        className="absolute -inset-2 rounded-full bg-primary/30"
+      />
+      <Animated.View
+        aria-hidden
+        pointerEvents="none"
+        style={glow}
+        className="absolute -inset-1 rounded-full bg-primary/40"
+      />
+
+      {/* Bright leading arc */}
       <Animated.View
         pointerEvents="none"
-        style={ringStyle}
-        className="absolute -inset-[3px] rounded-full border-2 border-transparent border-t-primary-foreground"
+        style={arcAStyle}
+        className="absolute -inset-[3px] rounded-full border-[2.5px] border-transparent border-t-primary-foreground border-r-primary-foreground/40"
+      />
+      {/* Trailing arc, offset for gradient feel */}
+      <Animated.View
+        pointerEvents="none"
+        style={arcBStyle}
+        className="absolute -inset-[3px] rounded-full border-[2.5px] border-transparent border-t-primary-foreground/55"
       />
       <Pressable
         accessibilityRole="button"
@@ -244,24 +339,53 @@ function SendButton({
         }}
         onPress={onPress}
         className={cn(
-          "h-9 w-9 items-center justify-center rounded-full",
+          "h-10 w-10 items-center justify-center rounded-full",
           enabled ? "bg-primary" : "bg-muted"
         )}
       >
-        <Animated.View style={arrowStyle} className="absolute">
-          <ChevronArrowUp
-            colorClassName={
-              enabled ? "border-primary-foreground" : "border-muted-foreground"
-            }
-          />
+        {/* Both glyphs are wrapped in an absolute layer that exactly fills the
+            button. The wrapper uses flex centering, so each glyph sits dead-
+            centre. Glyphs themselves are pixel-sized — no Tailwind % values. */}
+        <Animated.View
+          style={[
+            arrowStyle,
+            {
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          ]}
+        >
+          <ArrowUpGlyph filled={enabled} />
         </Animated.View>
-        <Animated.View style={stopStyle} className="absolute">
-          <Square colorClassName="bg-primary-foreground" />
+        <Animated.View
+          style={[
+            stopStyle,
+            {
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          ]}
+        >
+          <StopGlyph />
         </Animated.View>
       </Pressable>
     </Animated.View>
   );
 }
+
+/* ============================================================ */
+/* Icon button (Add attachment) — press lift                    */
+/* ============================================================ */
 
 function IconButton({
   children,
@@ -276,7 +400,9 @@ function IconButton({
 }) {
   const pressed = useSharedValue(0);
   const style = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(pressed.value ? PRESS_SCALE : 1, spring.press) }],
+    transform: [
+      { scale: withSpring(pressed.value ? PRESS_SCALE : 1, spring.press) },
+    ],
   }));
   return (
     <Animated.View style={style}>
@@ -292,13 +418,17 @@ function IconButton({
           pressed.value = 0;
         }}
         onPress={onPress}
-        className="h-9 w-9 items-center justify-center rounded-full bg-secondary"
+        className="h-10 w-10 items-center justify-center rounded-full border border-border bg-secondary"
       >
         {children}
       </Pressable>
     </Animated.View>
   );
 }
+
+/* ============================================================ */
+/* Attachment chip — press-lift with subtle shadow              */
+/* ============================================================ */
 
 function AttachmentChip({
   attachment,
@@ -307,14 +437,37 @@ function AttachmentChip({
   attachment: PromptAttachment;
   onRemove?: (id: string) => void;
 }) {
+  const pressed = useSharedValue(0);
+  const style = useAnimatedStyle(() => ({
+    transform: [
+      { scale: withSpring(pressed.value ? 0.96 : 1, spring.press) },
+      { translateY: withSpring(pressed.value ? 1 : 0, spring.press) },
+    ],
+  }));
+
+  // With a thumbnail, the chip shows the image; without, a small primary dot.
+  const hasImage = Boolean(attachment.uri);
+
   return (
     <Animated.View
       entering={FadeIn.duration(duration.fast)}
-      className="flex-row items-center gap-1.5 rounded-xl bg-secondary px-2.5 py-1.5"
+      style={style}
+      className="relative flex-row items-center gap-2 self-start rounded-xl border border-border bg-secondary py-1 pl-1 pr-2.5"
     >
+      {hasImage ? (
+        <Image
+          source={{ uri: attachment.uri }}
+          accessibilityIgnoresInvertColors
+          className="h-7 w-7 rounded-lg bg-muted"
+        />
+      ) : (
+        <View className="h-7 w-7 items-center justify-center rounded-lg bg-muted">
+          <View className="h-1.5 w-1.5 rounded-full bg-primary" />
+        </View>
+      )}
       <Text
         numberOfLines={1}
-        className="max-w-[140px] text-xs font-medium text-secondary-foreground"
+        className="max-w-[120px] text-xs font-medium text-secondary-foreground"
       >
         {attachment.label}
       </Text>
@@ -322,55 +475,152 @@ function AttachmentChip({
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Remove ${attachment.label}`}
-          hitSlop={8}
+          hitSlop={6}
+          onPressIn={() => {
+            pressed.value = 1;
+          }}
+          onPressOut={() => {
+            pressed.value = 0;
+          }}
           onPress={() => onRemove(attachment.id)}
-          className="h-4 w-4 items-center justify-center rounded-full bg-muted-foreground/20"
+          className="-mr-0.5 h-4 w-4 items-center justify-center rounded-full bg-background/60"
         >
-          <XIcon colorClassName="bg-secondary-foreground" />
+          <CloseGlyph />
         </Pressable>
       ) : null}
     </Animated.View>
   );
 }
 
-/* --- Dependency-free geometric icons (no icon library needed) --- */
+/* ============================================================ */
+/* Glyphs — composed Views, polished weights                    */
+/* ============================================================ */
 
-/** Up arrow built from a border line (stem) + an L-shaped chevron (head). */
-function ChevronArrowUp({ colorClassName }: { colorClassName: string }) {
+/**
+ * Up arrow — a solid filled triangle head sitting on a rectangular stem.
+ * Uses RN's borderWidth-triangle trick for the head (no SVG dependency).
+ *
+ * Layout uses pure flex column centering — no percentages, no absolute
+ * positioning, so it sits dead-centre wherever it's rendered.
+ */
+function ArrowUpGlyph({ filled }: { filled: boolean }) {
+  // Resolved to literal colors so the borderWidth-triangle trick works
+  // reliably across platforms (NativeWind className colors don't always
+  // resolve on a 0×0 View on web).
+  const color = filled ? "#FFFFFF" : "rgba(244, 244, 250, 0.55)";
+
   return (
-    <View className="h-4 w-4 items-center justify-center">
-      <View className={cn("absolute bottom-[2px] h-[11px] border-l-2", colorClassName)} />
+    <View
+      style={{
+        width: 16,
+        height: 16,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* Triangle head: a 0×0 View whose bottom border is the colored fill.
+          12 wide × 8 tall — wide chevron, like ChatGPT/Claude send icons. */}
       <View
-        className={cn(
-          "absolute top-[3px] h-[9px] w-[9px] rotate-45 border-l-2 border-t-2",
-          colorClassName
-        )}
+        style={{
+          width: 0,
+          height: 0,
+          borderLeftWidth: 6,
+          borderRightWidth: 6,
+          borderBottomWidth: 8,
+          borderLeftColor: "transparent",
+          borderRightColor: "transparent",
+          borderBottomColor: color,
+        }}
+      />
+      {/* Stem: tucked right under the head, sharing the same color. */}
+      <View
+        style={{
+          width: 3,
+          height: 6,
+          backgroundColor: color,
+          marginTop: -0.5,
+          borderBottomLeftRadius: 1.5,
+          borderBottomRightRadius: 1.5,
+        }}
       />
     </View>
   );
 }
 
-/** Solid rounded square — the stop glyph. Expects a `bg-*` class. */
-function Square({ colorClassName }: { colorClassName: string }) {
-  return <View className={cn("h-3 w-3 rounded-[3px]", colorClassName)} />;
+/** Stop — rounded square. */
+function StopGlyph() {
+  return (
+    <View
+      style={{
+        width: 12,
+        height: 12,
+        borderRadius: 3,
+        backgroundColor: "#FFFFFF",
+      }}
+    />
+  );
 }
 
-/** Plus — two bars. Expects a `bg-*` class. */
-function PlusIcon({ colorClassName }: { colorClassName: string }) {
+/** Plus — two centred, rounded bars (inline positioning, no percent transforms). */
+function PlusGlyph() {
+  const color = "rgba(244, 244, 250, 0.85)";
   return (
-    <View className="h-4 w-4 items-center justify-center">
-      <View className={cn("absolute h-[2px] w-3.5 rounded-full", colorClassName)} />
-      <View className={cn("absolute h-3.5 w-[2px] rounded-full", colorClassName)} />
+    <View style={{ width: 16, height: 16 }}>
+      <View
+        style={{
+          position: "absolute",
+          top: 7,
+          left: 1,
+          width: 14,
+          height: 2.5,
+          borderRadius: 9,
+          backgroundColor: color,
+        }}
+      />
+      <View
+        style={{
+          position: "absolute",
+          top: 1,
+          left: 7,
+          width: 2.5,
+          height: 14,
+          borderRadius: 9,
+          backgroundColor: color,
+        }}
+      />
     </View>
   );
 }
 
-/** Close — two crossed bars. Expects a `bg-*` class. */
-function XIcon({ colorClassName }: { colorClassName: string }) {
+/** Close — two crossed, rounded bars. */
+function CloseGlyph() {
+  const color = "rgba(244, 244, 250, 0.85)";
   return (
-    <View className="h-3 w-3 items-center justify-center">
-      <View className={cn("absolute h-[1.5px] w-3 rotate-45 rounded-full", colorClassName)} />
-      <View className={cn("absolute h-[1.5px] w-3 -rotate-45 rounded-full", colorClassName)} />
+    <View style={{ width: 12, height: 12 }}>
+      <View
+        style={{
+          position: "absolute",
+          top: 5.25,
+          left: 0,
+          width: 12,
+          height: 1.75,
+          borderRadius: 9,
+          backgroundColor: color,
+          transform: [{ rotate: "45deg" }],
+        }}
+      />
+      <View
+        style={{
+          position: "absolute",
+          top: 5.25,
+          left: 0,
+          width: 12,
+          height: 1.75,
+          borderRadius: 9,
+          backgroundColor: color,
+          transform: [{ rotate: "-45deg" }],
+        }}
+      />
     </View>
   );
 }

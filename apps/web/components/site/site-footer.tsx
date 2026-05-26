@@ -1,23 +1,18 @@
 import Link from "next/link";
 
 import { siteConfig } from "@/lib/config";
+import { LogoWordmark } from "@/components/brand/logo";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/60">
-      <div className="mx-auto max-w-6xl px-5 py-12">
+    <footer className="border-t border-border/60 bg-background">
+      <div className="mx-auto max-w-7xl px-5 py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-[15px] font-semibold tracking-tight"
-            >
-              <span className="grid h-7 w-7 place-items-center rounded-lg bg-primary font-bold text-primary-foreground">
-                a
-              </span>
-              appCN
+            <Link href="/" className="inline-flex items-center gap-2">
+              <LogoWordmark size="default" />
             </Link>
-            <p className="mt-3 max-w-xs text-sm text-muted-foreground">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
               Copy-paste mobile components for React Native. Motion-first, dark
               by default, AI-native flagship.
             </p>
@@ -59,9 +54,11 @@ export function SiteFooter() {
           />
         </div>
 
-        <div className="mt-12 flex flex-col items-start justify-between gap-2 border-t border-border/60 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} appCN. You own the code.</p>
-          <p>Built with Expo, NativeWind &amp; Reanimated.</p>
+        <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-border/60 pt-8 text-sm text-muted-foreground sm:flex-row sm:items-center">
+          <p>© {new Date().getFullYear()} appCN — you own the code.</p>
+          <p className="font-mono text-xs uppercase tracking-wider">
+            Built with Expo · NativeWind · Reanimated
+          </p>
         </div>
       </div>
     </footer>

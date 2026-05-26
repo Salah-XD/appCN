@@ -38,6 +38,21 @@ export default {
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        serif: ["var(--font-instrument-serif)", "ui-serif", "serif"],
+      },
+      keyframes: {
+        "marquee-x": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        "marquee-x-reverse": {
+          from: { transform: "translateX(-50%)" },
+          to: { transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        "marquee-x": "marquee-x 40s linear infinite",
+        "marquee-x-reverse": "marquee-x-reverse 40s linear infinite",
       },
     },
   },
