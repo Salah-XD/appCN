@@ -74,6 +74,55 @@ checklist for you.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for dev setup and PR conventions.
 
+## Deploying
+
+The site ships as **two Vercel projects** from this monorepo — both deploy on
+the same `git push`:
+
+| Project   | Vercel root directory | What it serves                                              |
+| --------- | --------------------- | ----------------------------------------------------------- |
+| Docs      | `apps/web`            | Landing, `/components/*`, the shadcn registry at `/r/*.json` |
+| Showcase  | `apps/showcase`       | Expo web export — the iframe target for the Web preview tab |
+
+### Deploy order (matters)
+
+1. **Deploy the showcase first** (`apps/showcase`) so you have a URL.
+2. **Deploy the docs**, setting `NEXT_PUBLIC_SHOWCASE_WEB_URL` to the URL from step 1.
+3. Optional: set custom domains (`appcn.dev` → docs, `showcase.appcn.dev` → showcase).
+
+### Vercel project settings
+
+For each project, in the Vercel dashboard:
+
+- **Connect** the appCN GitHub repo.
+- **Root Directory** → `apps/web` or `apps/showcase` (the only setting that
+  matters — everything else comes from each project's `vercel.json`).
+- **Install / Build / Output** — leave on defaults; `vercel.json` overrides them.
+
+### Required environment variables (docs project)
+
+Set in **Vercel → Project → Settings → Environment Variables**. See
+[`apps/web/.env.example`](./apps/web/.env.example) for the canonical list.
+
+| Variable                       | Value                                              |
+| ------------------------------ | -------------------------------------------------- |
+| `NEXT_PUBLIC_SHOWCASE_WEB_URL` | `https://<showcase-project>.vercel.app`            |
+| `NEXT_PUBLIC_EXPO_URL`         | *(empty for v1 — needs EAS Update for the QR tab)* |
+| `NEXT_PUBLIC_REGISTRY_URL`     | `https://<docs-domain>/r`                          |
+
+The showcase project needs no env vars.
+
+### CLI deploy (one-off)
+
+If you'd rather skip the dashboard:
+
+```bash
+# Once per project
+npm i -g vercel
+cd apps/showcase && vercel --prod
+cd ../web && vercel --prod
+```
+
 ## License
 
 [MIT](./LICENSE) — you own the code.
