@@ -102,7 +102,6 @@ export function Chat() {
 | `StreamBubble`    | AI       | Three-phase thinking → token stream → settle                |
 | `PromptInput`     | AI       | Send morphs into a stop with a spinning ring                |
 | `ReasoningTrace`  | AI       | Auto-collapses the instant the answer lands                 |
-| `VoiceWaveform`   | AI       | Breathes when idle, shifts hue to accent when listening     |
 
 Each one has full docs (anatomy, props table, examples, accessibility) at
 <https://appcn.dev/components/{slug}>, plus a QR you can scan with Expo Go

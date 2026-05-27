@@ -19,7 +19,6 @@ body:
         - StreamBubble
         - PromptInput
         - ReasoningTrace
-        - VoiceWaveform
         - Other / cross-component
     validations:
       required: true

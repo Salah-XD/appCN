@@ -78,7 +78,7 @@ export function FooterCTA() {
             Open the catalog
           </Link>
           <a
-            href="https://github.com/your-org/appcn"
+            href="https://github.com/Salah-XD/appCN"
             target="_blank"
             rel="noreferrer"
             className="rounded-full border border-border bg-card/40 px-8 py-3.5 text-sm font-semibold text-foreground/90 transition-colors hover:bg-card"

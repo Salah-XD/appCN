@@ -37,7 +37,6 @@ You'll also need the peer deps and the Tailwind preset — see
 | `StreamBubble`    | AI       | Three-phase thinking → token stream → settle                |
 | `PromptInput`     | AI       | Send morphs into a stop with a spinning ring                |
 | `ReasoningTrace`  | AI       | Auto-collapses the instant the answer lands                 |
-| `VoiceWaveform`   | AI       | Breathes when idle, shifts hue to accent when listening     |
 
 Browse the live catalog at <https://appcn.dev/components> — every component
 has a QR you can scan with Expo Go to see it run on your phone, an interactive

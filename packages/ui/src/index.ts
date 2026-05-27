@@ -10,8 +10,8 @@ export type { PromptInputProps, PromptAttachment } from "./ai/prompt-input";
 export { ReasoningTrace } from "./ai/reasoning-trace";
 export type { ReasoningTraceProps } from "./ai/reasoning-trace";
 
-export { VoiceWaveform } from "./ai/voice-waveform";
-export type { VoiceWaveformProps } from "./ai/voice-waveform";
+export { VoiceSphere } from "./ai/voice-sphere";
+export type { VoiceSphereProps } from "./ai/voice-sphere";
 
 export { cn } from "./lib/cn";
 export { duration, easing, spring, PRESS_SCALE } from "./lib/motion";
@@ -22,6 +22,6 @@ export {
   buttonMeta,
   streamBubbleMeta,
   promptInputMeta,
-  voiceWaveformMeta,
   reasoningTraceMeta,
+  voiceSphereMeta,
 } from "./lib/meta";

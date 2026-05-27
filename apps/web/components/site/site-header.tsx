@@ -10,7 +10,7 @@ import { LogoWordmark } from "@/components/brand/logo";
 const NAV = [
   { href: "/components", label: "Components" },
   { href: "/components/stream-bubble", label: "AI", match: "/components/" },
-  { href: "https://github.com/your-org/appcn", label: "GitHub", external: true },
+  { href: "https://github.com/Salah-XD/appCN", label: "GitHub", external: true },
 ];
 
 export function SiteHeader() {

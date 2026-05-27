@@ -3,7 +3,7 @@ import {
   promptInputMeta,
   reasoningTraceMeta,
   streamBubbleMeta,
-  voiceWaveformMeta,
+  voiceSphereMeta,
   type ComponentMeta,
 } from "@appcn/ui/lib/meta";
 
@@ -61,13 +61,13 @@ export const components: ComponentEntry[] = [
     meta: reasoningTraceMeta,
   },
   {
-    slug: "voice-waveform",
-    title: voiceWaveformMeta.title,
-    description: voiceWaveformMeta.description,
-    category: voiceWaveformMeta.category,
-    sourcePath: "../../packages/ui/src/ai/voice-waveform.tsx",
-    registryItem: "voice-waveform",
-    meta: voiceWaveformMeta,
+    slug: "voice-sphere",
+    title: voiceSphereMeta.title,
+    description: voiceSphereMeta.description,
+    category: voiceSphereMeta.category,
+    sourcePath: "../../packages/ui/src/ai/voice-sphere.tsx",
+    registryItem: "voice-sphere",
+    meta: voiceSphereMeta,
   },
 ];
 

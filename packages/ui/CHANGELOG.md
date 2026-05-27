@@ -10,7 +10,7 @@ Initial public release.
 
 ### Added
 - **Components:** `Button` (base) + `StreamBubble`, `PromptInput`,
-  `ReasoningTrace`, `VoiceWaveform` (AI collection).
+  `ReasoningTrace` (AI collection).
 - **Libs:** `cn`, motion tokens (`duration`, `easing`, `spring`,
   `PRESS_SCALE`), safe `haptic.*` wrapper.
 - **Tailwind preset:** dark-first HSL token palette consumable via
@@ -31,4 +31,4 @@ Initial public release.
 - `expo-haptics` is an **optional** peer dep — the components no-op on web
   and on devices without it.
 
-[0.1.0]: https://github.com/your-org/appcn/releases/tag/v0.1.0
+[0.1.0]: https://github.com/Salah-XD/appCN/releases/tag/v0.1.0

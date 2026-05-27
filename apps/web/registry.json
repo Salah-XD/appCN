@@ -106,17 +106,22 @@
       ]
     },
     {
-      "name": "voice-waveform",
+      "name": "voice-sphere",
       "type": "registry:component",
-      "title": "Voice Waveform",
-      "description": "Live mic visualizer that breathes when idle and shifts hue to the accent when active.",
-      "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn", "@appcn/motion"],
+      "title": "Voice Sphere",
+      "description": "True-3D particle sphere voice indicator — Fibonacci-distributed particles, GLSL equator wave, primary-to-accent gradient. Built on react-three-fiber.",
+      "dependencies": [
+        "three",
+        "@react-three/fiber",
+        "expo-gl",
+        "react-native-reanimated"
+      ],
+      "registryDependencies": ["@appcn/cn"],
       "files": [
         {
-          "path": "../../packages/ui/src/ai/voice-waveform.tsx",
+          "path": "../../packages/ui/src/ai/voice-sphere.tsx",
           "type": "registry:component",
-          "target": "components/ui/voice-waveform.tsx"
+          "target": "components/ui/voice-sphere.tsx"
         }
       ]
     }

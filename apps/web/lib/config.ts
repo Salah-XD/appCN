@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: "Copy-paste mobile components for React Native.",
   description:
     "Beautiful, motion-first React Native components you own — NativeWind-styled, installed via the shadcn CLI, with a featured AI-native collection.",
-  github: "https://github.com/your-org/appcn",
+  github: "https://github.com/Salah-XD/appCN",
   /** Expo showcase web build (expo start --web defaults to :8081). */
   showcaseWebUrl:
     process.env.NEXT_PUBLIC_SHOWCASE_WEB_URL ?? "http://localhost:8081",

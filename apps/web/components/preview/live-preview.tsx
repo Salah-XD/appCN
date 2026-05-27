@@ -13,6 +13,7 @@ export function LivePreview({
   className,
   title,
   bare = false,
+  query,
 }: {
   slug: string;
   showcaseWebUrl: string;
@@ -21,15 +22,19 @@ export function LivePreview({
   title?: string;
   /** Skip the bezel — useful when wrapped by a larger phone frame. */
   bare?: boolean;
+  /** Optional query string (without the leading `?`) appended to the URL. */
+  query?: string;
 }) {
-  const src = `${showcaseWebUrl}/c/${slug}`;
+  const src = `${showcaseWebUrl}/c/${slug}${query ? `?${query}` : ""}`;
   if (bare) {
+    // Fills the parent container — caller controls aspect/sizing via the
+    // wrapping frame. Avoids dueling aspect ratios.
     return (
       <iframe
         src={src}
         title={title ?? `${slug} live preview`}
         loading="lazy"
-        className={cn("aspect-[9/19] w-full border-0", className)}
+        className={cn("block h-full w-full border-0", className)}
       />
     );
   }

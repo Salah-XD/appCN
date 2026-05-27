@@ -18,11 +18,11 @@
   "homepage": "https://appcn.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/appcn.git",
+    "url": "https://github.com/Salah-XD/appCN.git",
     "directory": "packages/ui"
   },
   "bugs": {
-    "url": "https://github.com/your-org/appcn/issues"
+    "url": "https://github.com/Salah-XD/appCN/issues"
   },
   "publishConfig": {
     "access": "public"
@@ -55,21 +55,37 @@
     "tailwind-merge": "^2.6.0"
   },
   "peerDependencies": {
+    "@react-three/fiber": ">=9",
+    "expo-gl": "*",
     "expo-haptics": "*",
     "nativewind": ">=4",
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*"
+    "react-native-reanimated": "*",
+    "three": ">=0.170"
   },
   "peerDependenciesMeta": {
     "expo-haptics": {
+      "optional": true
+    },
+    "@react-three/fiber": {
+      "optional": true
+    },
+    "expo-gl": {
+      "optional": true
+    },
+    "three": {
       "optional": true
     }
   },
   "devDependencies": {
     "@appcn/tsconfig": "workspace:*",
+    "@react-three/fiber": "^9.6.1",
+    "@types/three": "^0.184.0",
+    "expo-gl": "~16.0.10",
     "nativewind": "^4.1.23",
+    "three": "^0.184.0",
     "typescript": "^5.7.3"
   }
 }

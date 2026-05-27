@@ -12,11 +12,25 @@ import { demoMap } from "../../lib/demos";
  * and visually noisy. The standalone gallery handles navigation.
  */
 export default function ComponentPreview() {
-  const { slug } = useLocalSearchParams<{ slug: string }>();
+  const { slug, fake } = useLocalSearchParams<{
+    slug: string;
+    fake?: string;
+  }>();
   const demo = slug ? demoMap[slug] : undefined;
+  const isFake = fake === "1";
 
+  // In fake/embed mode, drop the padding + center wrapping so the demo can
+  // own the whole iframe area (no visible boundary between page bg and
+  // component bg).
   return (
-    <View className="flex-1 items-center justify-center bg-background px-6 py-8">
+    <View
+      className={
+        isFake
+          ? "flex-1"
+          : "flex-1 items-center justify-center bg-background px-6 py-8"
+      }
+      style={isFake ? { backgroundColor: "#0A0A14" } : undefined}
+    >
       {demo ? (
         demo.render()
       ) : (

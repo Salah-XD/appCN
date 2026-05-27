@@ -1,11 +1,12 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Platform, Text, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import {
   Button,
   PromptInput,
   ReasoningTrace,
   StreamBubble,
-  VoiceWaveform,
+  VoiceSphere,
   type PromptAttachment,
 } from "@appcn/ui";
 
@@ -104,17 +105,189 @@ function ReasoningDemo() {
   );
 }
 
-/** VoiceWaveform with a press-to-listen toggle. */
-function WaveformDemo() {
-  const [active, setActive] = React.useState(false);
+/**
+ * Fake-amplitude variant used by the landing hero. No button, no mic, no
+ * chrome — just the sphere animating with a synthetic speech-like signal so
+ * it looks alive in the marketing iframe.
+ */
+function SphereFakeDemo() {
+  const [amplitude, setAmplitude] = React.useState(0);
+
+  React.useEffect(() => {
+    let t = 0;
+    let raf = 0;
+    const tick = () => {
+      t += 0.016;
+      // Layered sines + a slow envelope = organic speech-shaped amplitude.
+      const swell = Math.sin(t * 1.2) * 0.5 + 0.5;
+      const mid = Math.sin(t * 3.5) * 0.3;
+      const hi = Math.sin(t * 8.7) * 0.18;
+      const burstEnv = Math.pow(Math.sin(t * 0.45) * 0.5 + 0.5, 2);
+      const amp = Math.max(
+        0,
+        Math.min(1, (swell * 0.5 + mid + hi) * burstEnv)
+      );
+      setAmplitude(amp);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
-    <View className="w-full items-center gap-6">
-      <VoiceWaveform active={active} />
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#0A0A14",
+      }}
+    >
+      <VoiceSphere active amplitude={amplitude} size={240} />
+    </View>
+  );
+}
+
+/**
+ * VoiceSphere with live mic metering on web. Tapping "Speak to me" requests
+ * microphone access, sets up an AnalyserNode, and feeds RMS amplitude into
+ * the sphere every frame. Tap again to stop and release the mic.
+ *
+ * On native this currently falls back to internal idle animation — wiring
+ * `expo-av` recorder metering is left to the consumer.
+ */
+function SphereDemo() {
+  // Honor ?fake=1 in the URL — the landing hero embeds this route with that
+  // param to get a chrome-free, mic-free, auto-animating preview.
+  const params = useLocalSearchParams<{ fake?: string }>();
+  if (params.fake === "1") {
+    return <SphereFakeDemo />;
+  }
+
+  return <SphereInteractiveDemo />;
+}
+
+function SphereInteractiveDemo() {
+  const [active, setActive] = React.useState(false);
+  const [amplitude, setAmplitude] = React.useState<number | undefined>(undefined);
+  const audioRef = React.useRef<{
+    ctx: AudioContext;
+    stream: MediaStream;
+    raf: number;
+  } | null>(null);
+
+  const stop = React.useCallback(() => {
+    const ref = audioRef.current;
+    if (ref) {
+      cancelAnimationFrame(ref.raf);
+      ref.stream.getTracks().forEach((t) => t.stop());
+      void ref.ctx.close();
+      audioRef.current = null;
+    }
+    setActive(false);
+    setAmplitude(undefined);
+  }, []);
+
+  const start = React.useCallback(async () => {
+    if (Platform.OS !== "web") {
+      setActive(true);
+      return;
+    }
+    try {
+      console.log("[VoiceSphere demo] requesting mic…");
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log(
+        "[VoiceSphere demo] mic granted. tracks:",
+        stream.getAudioTracks().map((t) => ({
+          label: t.label,
+          enabled: t.enabled,
+          muted: t.muted,
+          readyState: t.readyState,
+        }))
+      );
+
+      const Ctx =
+        (window as any).AudioContext || (window as any).webkitAudioContext;
+      const ctx: AudioContext = new Ctx();
+      // Resume the context — some browsers create it suspended until a
+      // user-gesture-bound resume() call.
+      if (ctx.state === "suspended") {
+        await ctx.resume();
+      }
+      console.log(
+        "[VoiceSphere demo] AudioContext state:",
+        ctx.state,
+        "sampleRate:",
+        ctx.sampleRate
+      );
+
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.smoothingTimeConstant = 0.4;
+      source.connect(analyser);
+
+      const data = new Uint8Array(analyser.fftSize);
+      let smoothed = 0;
+      let logCounter = 0;
+      const tick = () => {
+        analyser.getByteTimeDomainData(data);
+        let sumSq = 0;
+        let min = 255;
+        let max = 0;
+        for (let i = 0; i < data.length; i++) {
+          const v = (data[i] - 128) / 128;
+          sumSq += v * v;
+          if (data[i] < min) min = data[i];
+          if (data[i] > max) max = data[i];
+        }
+        const rms = Math.sqrt(sumSq / data.length);
+        // Boosted scale — speech RMS is small, push it up to make the wave
+        // read clearly. Tune down if it feels too sensitive.
+        const target = Math.min(1, rms * 8);
+        smoothed = smoothed * 0.55 + target * 0.45;
+        setAmplitude(smoothed);
+
+        logCounter++;
+        if (logCounter % 30 === 0) {
+          // ~ twice a second
+          console.log(
+            `[mic] raw min/max: ${min}/${max}, rms: ${rms.toFixed(4)}, target: ${target.toFixed(3)}, smoothed: ${smoothed.toFixed(3)}`
+          );
+        }
+
+        if (audioRef.current) {
+          audioRef.current.raf = requestAnimationFrame(tick);
+        }
+      };
+
+      audioRef.current = {
+        ctx,
+        stream,
+        raf: requestAnimationFrame(tick),
+      };
+      setActive(true);
+    } catch (e) {
+      console.error("[VoiceSphere demo] mic access failed:", e);
+      setActive(false);
+    }
+  }, []);
+
+  React.useEffect(() => stop, [stop]);
+
+  return (
+    <View className="w-full items-center gap-4">
+      <VoiceSphere active={active} amplitude={amplitude} size={280} />
+      {active ? (
+        <Text className="font-mono text-xs text-muted-foreground">
+          amp: {amplitude != null ? amplitude.toFixed(3) : "—"}
+        </Text>
+      ) : null}
       <Button
         variant={active ? "destructive" : "default"}
-        onPress={() => setActive((a) => !a)}
+        onPress={() => (active ? stop() : start())}
       >
-        {active ? "Stop" : "Start listening"}
+        {active ? "Stop" : "Speak to me"}
       </Button>
     </View>
   );
@@ -177,12 +350,12 @@ export const demos: Demo[] = [
     render: () => <ReasoningDemo />,
   },
   {
-    slug: "voice-waveform",
-    title: "Voice Waveform",
+    slug: "voice-sphere",
+    title: "Voice Sphere",
     description:
-      "Live mic visualizer; breathes when idle, shifts hue to the accent when active.",
+      "True-3D particle sphere that breathes when idle and ripples with sound when active.",
     category: "ai",
-    render: () => <WaveformDemo />,
+    render: () => <SphereDemo />,
   },
 ];
 
