@@ -46,7 +46,6 @@
     "LICENSE"
   ],
   "scripts": {
-    "lint": "eslint src",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
