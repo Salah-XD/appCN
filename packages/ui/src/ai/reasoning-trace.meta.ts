@@ -102,4 +102,5 @@ return (
     "Tapping the header fires `haptic.selection()` — a crisp detent tick that grounds the toggle.",
     "Honors `useReducedMotion()` — the height animation, shimmer, and chevron rotation all short-circuit to instant.",
   ],
+  addedAt: "2026-05-28",
 };

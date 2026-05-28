@@ -130,4 +130,5 @@ return (
     "Honors `useReducedMotion()` — the send-to-stop morph and ring spin both short-circuit when reduced motion is on.",
     "Hit slop is 8px on all small icon buttons (send, attachment-remove) so they meet ≥44pt targets.",
   ],
+  addedAt: "2026-05-28",
 };

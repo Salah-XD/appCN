@@ -83,4 +83,5 @@ export const meta: ComponentMeta = {
     "Icon-only buttons must pass `accessibilityLabel` since there is no visible text.",
     "Minimum touch target is 36pt (size sm) — prefer `default` (48pt) or bigger for primary actions.",
   ],
+  addedAt: "2026-05-28",
 };

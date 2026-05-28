@@ -2,21 +2,34 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Github, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { LogoWordmark } from "@/components/brand/logo";
-
-const NAV = [
-  { href: "/components", label: "Components" },
-  { href: "/components/stream-bubble", label: "AI", match: "/components/" },
-  { href: "/docs/cli", label: "CLI", match: "/docs/" },
-  { href: "https://github.com/Salah-XD/appCN", label: "GitHub", external: true },
-];
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { CommandPaletteTrigger } from "@/components/site/command-palette";
+import { DocsSidebar } from "@/components/site/docs-sidebar";
+import { ThemeToggle } from "@/components/site/theme-toggle";
+import { getSidebarGroups } from "@/lib/sidebar-groups";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Show the docs hamburger on `(docs)` group routes only.
+  const onDocs =
+    pathname === "/components" ||
+    pathname.startsWith("/components/") ||
+    pathname.startsWith("/docs/");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -24,6 +37,15 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close the mobile sheet whenever the route changes. This is an
+  // intentional sync-to-route side effect; the alternative (intercepting
+  // every Link click inside DocsSidebar) leaks navigation concerns into the
+  // sidebar component.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
     <header
@@ -34,7 +56,37 @@ export function SiteHeader() {
           : "border-b border-transparent bg-background/30 backdrop-blur"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
+      <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-2 px-4 lg:px-6">
+        {onDocs ? (
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Open navigation"
+                className="lg:hidden"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="left"
+              className="w-72 border-r border-border bg-background p-0"
+            >
+              <SheetTitle className="sr-only">Docs navigation</SheetTitle>
+              <SheetDescription className="sr-only">
+                Browse the appCN component library and documentation.
+              </SheetDescription>
+              <div className="flex h-16 items-center border-b border-border px-4">
+                <LogoWordmark size="sm" />
+              </div>
+              <div className="p-2">
+                <DocsSidebar groups={getSidebarGroups()} mobile />
+              </div>
+            </SheetContent>
+          </Sheet>
+        ) : null}
+
         <Link
           href="/"
           className="group inline-flex items-center gap-2 transition-opacity hover:opacity-80"
@@ -46,40 +98,25 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1 text-sm">
-          {NAV.map((item) => {
-            const active = item.match
-              ? pathname.startsWith(item.match)
-              : pathname === item.href;
-            if (item.external) {
-              return (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-full px-3.5 py-1.5 text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
-                >
-                  {item.label}
-                </a>
-              );
-            }
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "rounded-full px-3.5 py-1.5 transition-colors",
-                  active
-                    ? "bg-card text-foreground"
-                    : "text-muted-foreground hover:bg-card hover:text-foreground"
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="flex-1" />
+
+        <CommandPaletteTrigger />
+        <ThemeToggle />
+        <Button
+          asChild
+          variant="ghost"
+          size="icon"
+          aria-label="appCN on GitHub"
+          className="h-9 w-9"
+        >
+          <a
+            href="https://github.com/Salah-XD/appCN"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+        </Button>
       </div>
     </header>
   );

@@ -86,4 +86,5 @@ return <VoiceSphere active amplitude={level} />;`,
     "Honors `useReducedMotion()` — freezes the time uniform, drops amplitude to a static value, and stops auto-rotation. The sphere still reads as a 3D object, just still.",
     "No interactive elements inside — pair with a real Pressable (mic toggle) that owns the focus + hit target.",
   ],
+  addedAt: "2026-05-28",
 };

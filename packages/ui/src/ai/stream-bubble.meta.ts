@@ -83,4 +83,5 @@ return (
     "The caret is decorative (no role); it's announced as part of the streaming text.",
     "Tool chips inherit their text as accessible content — no extra label needed.",
   ],
+  addedAt: "2026-05-28",
 };

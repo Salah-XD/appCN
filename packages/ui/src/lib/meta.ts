@@ -51,6 +51,16 @@ export interface ComponentMeta {
   examples: ExampleDoc[];
   /** Bullets covering screen-reader labels, hit targets, reduced-motion, etc. */
   a11y: string[];
+  /**
+   * ISO date (yyyy-mm-dd) the component first shipped. Used by the docs site
+   * to render a `NEW` badge for the first 30 days after this date.
+   */
+  addedAt?: string;
+  /**
+   * ISO date of the last meaningful update (api / motion / design overhaul,
+   * not a typo fix). Used to render an `UPDATED` badge for 14 days.
+   */
+  updatedAt?: string;
 }
 
 /* --- Filled-in metas for every appCN component, re-exported for web docs. --- */

@@ -10,11 +10,13 @@ name: Release
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'apps/web/**'
-      - 'apps/showcase/**'
-      - '**/*.md'
-      - 'docs/**'
+    # Allowlist — only run when files that actually affect a publish change.
+    # Pure docs / web / showcase / config commits don't trigger the env gate.
+    paths:
+      - 'packages/ui/**'
+      - 'packages/cli/**'
+      - '.changeset/**'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
     inputs:
       dry-run:
