@@ -7,7 +7,7 @@
  * docs unless its meta is filled in. See DESIGN.md → "Component checklist (SOP)".
  *
  * This file is also the web-safe meta entry point: the docs site imports the
- * filled-in metas from here via `@appcn/ui/lib/meta` (no RN code involved).
+ * filled-in metas from here via `@app-cn/ui/lib/meta` (no RN code involved).
  */
 
 export interface PropDoc {

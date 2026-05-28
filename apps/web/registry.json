@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "appcn",
-  "homepage": "https://appcn.dev",
+  "homepage": "https://appcn.vercel.app",
   "items": [
     {
       "name": "cn",
@@ -51,7 +51,7 @@
       "title": "Button",
       "description": "Pressable with variants and a Reanimated press-scale.",
       "dependencies": ["class-variance-authority", "react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn"],
+      "registryDependencies": ["@app-cn/cn"],
       "files": [
         {
           "path": "../../packages/ui/src/components/button.tsx",
@@ -66,7 +66,7 @@
       "title": "Stream Bubble",
       "description": "AI assistant message: thinking, token streaming, tool chips, settle.",
       "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn", "@appcn/motion"],
+      "registryDependencies": ["@app-cn/cn", "@app-cn/motion"],
       "files": [
         {
           "path": "../../packages/ui/src/ai/stream-bubble.tsx",
@@ -81,7 +81,7 @@
       "title": "Prompt Input",
       "description": "AI composer: auto-grow, attachment chips, and a send button that morphs into a stop with a spinning ring.",
       "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn", "@appcn/motion", "@appcn/haptics"],
+      "registryDependencies": ["@app-cn/cn", "@app-cn/motion", "@app-cn/haptics"],
       "files": [
         {
           "path": "../../packages/ui/src/ai/prompt-input.tsx",
@@ -96,7 +96,7 @@
       "title": "Reasoning Trace",
       "description": "Collapsible chain-of-thought with a thinking shimmer that auto-collapses when the answer lands.",
       "dependencies": ["react-native-reanimated"],
-      "registryDependencies": ["@appcn/cn", "@appcn/motion", "@appcn/haptics"],
+      "registryDependencies": ["@app-cn/cn", "@app-cn/motion", "@app-cn/haptics"],
       "files": [
         {
           "path": "../../packages/ui/src/ai/reasoning-trace.tsx",
@@ -116,7 +116,7 @@
         "expo-gl",
         "react-native-reanimated"
       ],
-      "registryDependencies": ["@appcn/cn"],
+      "registryDependencies": ["@app-cn/cn"],
       "files": [
         {
           "path": "../../packages/ui/src/ai/voice-sphere.tsx",

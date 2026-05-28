@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to file a bug! Before you submit, please confirm:
-        - You've tried the latest version of `@appcn/ui` (or re-pulled the component via `npx shadcn add`).
+        - You've tried the latest version of `@app-cn/ui` (or re-pulled the component via `npx shadcn add`).
         - You've checked existing issues for duplicates.
 
   - type: dropdown
@@ -49,7 +49,7 @@ body:
   - type: input
     id: appcn-version
     attributes:
-      label: "@appcn/ui version (or registry pull date)"
+      label: "@app-cn/ui version (or registry pull date)"
       placeholder: "0.1.0 (npm) or 2026-05-26 (registry pull)"
     validations:
       required: true

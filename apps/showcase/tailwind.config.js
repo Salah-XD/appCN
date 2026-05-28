@@ -6,5 +6,5 @@ module.exports = {
     "./lib/**/*.{ts,tsx}",
     "../../packages/ui/src/**/*.{ts,tsx}",
   ],
-  presets: [require("@appcn/ui/tailwind-preset")],
+  presets: [require("@app-cn/ui/tailwind-preset")],
 };

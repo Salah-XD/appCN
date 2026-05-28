@@ -99,7 +99,7 @@ export { meta as <name>Meta } from "../<dir>/<slug>.meta";
 
 Edit `apps/showcase/lib/demos.tsx`:
 
-1. Add `<Name>` (and any related types) to the import from `@appcn/ui`.
+1. Add `<Name>` (and any related types) to the import from `@app-cn/ui`.
 2. If the demo has state, define a `<Name>Demo()` wrapper above the array.
 3. Push an entry into the `demos` array:
 
@@ -131,7 +131,7 @@ Edit `apps/web/lib/registry.ts` — add an entry to the `components` array:
 },
 ```
 
-…and add `<name>Meta` to the import from `@appcn/ui/lib/meta`.
+…and add `<name>Meta` to the import from `@app-cn/ui/lib/meta`.
 
 ## Step 6 — Wire the shadcn registry manifest
 
@@ -144,7 +144,7 @@ Edit `apps/web/registry.json` — push to `items`:
   "title": "<Title>",
   "description": "<one line>",
   "dependencies": ["<npm packages the component imports>"],
-  "registryDependencies": ["@appcn/cn", "@appcn/motion", "@appcn/haptics"],
+  "registryDependencies": ["@app-cn/cn", "@app-cn/motion", "@app-cn/haptics"],
   "files": [
     {
       "path": "../../packages/ui/src/<dir>/<slug>.tsx",
@@ -157,8 +157,8 @@ Edit `apps/web/registry.json` — push to `items`:
 
 `dependencies` → npm packages (`class-variance-authority`,
 `react-native-reanimated`, etc.). `registryDependencies` → namespaced refs
-to other appCN registry items (`@appcn/cn` always; `@appcn/motion` if
-imported; `@appcn/haptics` if imported).
+to other appCN registry items (`@app-cn/cn` always; `@app-cn/motion` if
+imported; `@app-cn/haptics` if imported).
 
 ## Step 7 — Verify
 
@@ -168,7 +168,7 @@ Run, in order:
 pnpm typecheck                     # ui + showcase + web all clean
 pnpm registry:build                # emits public/r/<slug>.json
 pnpm --filter showcase start       # open /c/<slug>, sanity-check the demo
-pnpm --filter @appcn/web dev       # /components/<slug> renders all sections
+pnpm --filter @app-cn/web dev       # /components/<slug> renders all sections
 ```
 
 If any step fails, fix it. Don't tell the user the component is done.

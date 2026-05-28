@@ -14,7 +14,7 @@ pnpm install
 pnpm dev
 
 # Just the docs site
-pnpm --filter @appcn/web dev
+pnpm --filter @app-cn/web dev
 
 # Just the Expo showcase (scan the QR with Expo Go)
 pnpm --filter showcase start
@@ -73,7 +73,7 @@ you. See [`AGENTS.md`](./AGENTS.md) for agent-specific guidance.
 
 ## Releasing (maintainers)
 
-`@appcn/ui` is published manually for now:
+`@app-cn/ui` is published manually for now:
 
 1. Bump `packages/ui/package.json` `version` and add a `CHANGELOG.md` entry.
 2. Tag the commit (`git tag v0.1.x && git push --tags`).

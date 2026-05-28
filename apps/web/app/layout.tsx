@@ -61,7 +61,7 @@ const jsonLd = {
   "@type": "WebSite",
   name: "appCN",
   description: DESCRIPTION,
-  url: "https://appcn.dev",
+  url: "https://appcn.vercel.app",
 };
 
 export default function RootLayout({

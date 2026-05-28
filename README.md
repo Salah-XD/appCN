@@ -20,10 +20,10 @@ Pick whichever fits how you build:
 
 ```bash
 # 1. Copy-paste a single component (no lock-in)
-npx shadcn@latest add https://appcn.dev/r/button.json
+npx shadcn@latest add https://appcn.vercel.app/r/button.json
 
 # 2. Or pull the whole library as a managed dep
-npm install @appcn/ui
+npm install @app-cn/ui
 ```
 
 You'll also need the peer deps and the Tailwind preset — see
@@ -38,7 +38,7 @@ You'll also need the peer deps and the Tailwind preset — see
 | `PromptInput`     | AI       | Send morphs into a stop with a spinning ring                |
 | `ReasoningTrace`  | AI       | Auto-collapses the instant the answer lands                 |
 
-Browse the live catalog at <https://appcn.dev/components> — every component
+Browse the live catalog at <https://appcn.vercel.app/components> — every component
 has a QR you can scan with Expo Go to see it run on your phone, an interactive
 web preview, and a recorded video.
 
@@ -87,7 +87,7 @@ the same `git push`:
 
 1. **Deploy the showcase first** (`apps/showcase`) so you have a URL.
 2. **Deploy the docs**, setting `NEXT_PUBLIC_SHOWCASE_WEB_URL` to the URL from step 1.
-3. Optional: set custom domains (`appcn.dev` → docs, `showcase.appcn.dev` → showcase).
+3. Optional: set custom domains (`appcn.vercel.app` → docs, `showcase.appcn.vercel.app` → showcase).
 
 ### Vercel project settings
 

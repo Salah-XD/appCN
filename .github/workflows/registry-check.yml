@@ -1,0 +1,55 @@
+name: Registry check
+
+# Catches broken registry JSON before it reaches Vercel.
+# `pnpm registry:build` runs shadcn build + import-rewrite + validator,
+# so a single command covers all three failure modes (build, rewrite, schema).
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/ui/src/**'
+      - 'apps/web/registry.json'
+      - 'apps/web/scripts/**'
+      - 'apps/web/package.json'
+      - '.github/workflows/registry-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/ui/src/**'
+      - 'apps/web/registry.json'
+      - 'apps/web/scripts/**'
+
+concurrency:
+  group: registry-check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: Build + validate registry JSON
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build + validate registry
+        run: pnpm registry:build
+
+      - name: Summarize emitted items
+        run: |
+          echo "## Emitted registry items" >> "$GITHUB_STEP_SUMMARY"
+          for f in apps/web/public/r/*.json; do
+            name=$(basename "$f" .json)
+            echo "- \`$name\`" >> "$GITHUB_STEP_SUMMARY"
+          done

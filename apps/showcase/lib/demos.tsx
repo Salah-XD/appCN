@@ -8,7 +8,7 @@ import {
   StreamBubble,
   VoiceSphere,
   type PromptAttachment,
-} from "@appcn/ui";
+} from "@app-cn/ui";
 
 export type DemoCategory = "base" | "ai";
 

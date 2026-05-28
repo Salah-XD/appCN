@@ -12,9 +12,10 @@ import { LivePreview } from "@/components/preview/live-preview";
 import { MagneticButton } from "./magnetic";
 import { LogoMark } from "@/components/brand/logo";
 import {
-  installCommand,
-  namespacedInstallCommand,
-  npmInstallCommand,
+  cliAddCommands,
+  installCommands,
+  namespacedInstallCommands,
+  npmInstallCommands,
 } from "@/lib/registry";
 
 const heroSlug = "voice-sphere";
@@ -157,21 +158,27 @@ export function Hero() {
             <InstallTabs
               options={[
                 {
-                  id: "shadcn",
-                  label: "shadcn",
-                  command: installCommand(heroSlug, siteConfig.registryBaseUrl),
-                  hint: "Copies the source straight into your project. No lock-in.",
+                  id: "cli",
+                  label: "appcn CLI",
+                  commands: cliAddCommands(heroSlug),
+                  hint: "Recommended. Configures NativeWind + Reanimated and registers @app-cn.",
                 },
                 {
-                  id: "ns",
+                  id: "shadcn-ns",
                   label: "namespaced",
-                  command: namespacedInstallCommand(heroSlug),
-                  hint: 'Once `"@appcn"` is registered in your components.json.',
+                  commands: namespacedInstallCommands(heroSlug),
+                  hint: 'After `appcn init` adds `"@app-cn"` to your components.json.',
                 },
                 {
-                  id: "npm",
-                  label: "npm",
-                  command: npmInstallCommand(),
+                  id: "shadcn",
+                  label: "shadcn URL",
+                  commands: installCommands(heroSlug, siteConfig.registryBaseUrl),
+                  hint: "No setup. Copies the source straight in.",
+                },
+                {
+                  id: "library",
+                  label: "library",
+                  commands: npmInstallCommands(),
                   hint: "Whole library, managed dep.",
                 },
               ]}

@@ -78,7 +78,7 @@ pnpm typecheck                        # tsc across ui + web (+ showcase via cd)
 pnpm lint
 pnpm registry:build                   # shadcn build + import-fix
 pnpm --filter showcase start          # scan QR with Expo Go
-pnpm --filter @appcn/web dev          # http://localhost:3100
+pnpm --filter @app-cn/web dev          # http://localhost:3100
 ```
 
 A passing `pnpm typecheck` plus `pnpm registry:build` is the minimum bar

@@ -37,7 +37,7 @@ export function SiteFooter() {
               },
               {
                 label: "npm",
-                href: "https://www.npmjs.com/package/@appcn/ui",
+                href: "https://www.npmjs.com/package/@app-cn/ui",
                 external: true,
               },
               { label: "Releases", href: `${siteConfig.github}/releases`, external: true },

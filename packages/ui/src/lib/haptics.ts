@@ -6,7 +6,7 @@ import * as Haptics from "expo-haptics";
  * no-ops on web, and never throws on unsupported devices. Pair physical motion
  * with a matching tap so interactions feel grounded.
  *
- * Declared as a registry dependency (`@appcn/haptics`) for copy-paste consumers.
+ * Declared as a registry dependency (`@app-cn/haptics`) for copy-paste consumers.
  */
 
 const enabled = Platform.OS !== "web";

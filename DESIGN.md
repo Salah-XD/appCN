@@ -23,7 +23,7 @@ the rules that make appCN feel like appCN. Read it before authoring a component.
 
 ## Motion (use the tokens, never magic numbers)
 
-Import from `../lib/motion` (registry: `@appcn/motion`). See `packages/ui/src/lib/motion.ts`.
+Import from `../lib/motion` (registry: `@app-cn/motion`). See `packages/ui/src/lib/motion.ts`.
 
 ```ts
 import { duration, easing, spring, PRESS_SCALE } from "../lib/motion";
@@ -41,7 +41,7 @@ import { duration, easing, spring, PRESS_SCALE } from "../lib/motion";
 
 ## Haptics
 
-Import from `../lib/haptics` (registry: `@appcn/haptics`). Fire-and-forget, no-ops on web.
+Import from `../lib/haptics` (registry: `@app-cn/haptics`). Fire-and-forget, no-ops on web.
 Pair a haptic with physical motion so interactions feel grounded: `haptic.selection()` for
 detents/toggles, `haptic.medium()` for confirmed actions, `haptic.success()` for completion.
 
@@ -128,7 +128,7 @@ won't resolve — so don't.
 
 6. **`apps/web/registry.json`** — shadcn `items` entry with the right
    `dependencies` (npm packages the component imports) and `registryDependencies`
-   (namespaced refs like `@appcn/cn`, `@appcn/motion`, `@appcn/haptics`). Path points at
+   (namespaced refs like `@app-cn/cn`, `@app-cn/motion`, `@app-cn/haptics`). Path points at
    `../../packages/ui/src/{components,ai}/<slug>.tsx`; target is `components/ui/<slug>.tsx`.
 
 7. **Verified** with this exact sequence — all four steps must pass:
@@ -136,7 +136,7 @@ won't resolve — so don't.
    pnpm typecheck                       # ui + showcase + web all clean
    pnpm registry:build                  # emits public/r/<slug>.json with rewritten imports
    pnpm --filter showcase start         # /c/<slug> reachable from the index gallery
-   pnpm --filter @appcn/web dev         # /components/<slug> renders all docs sections
+   pnpm --filter @app-cn/web dev         # /components/<slug> renders all docs sections
    ```
 
 If a step fails, the component isn't done — even if the .tsx itself compiles.

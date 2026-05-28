@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to **`@appcn/ui`** are documented here. Format follows
+All notable changes to **`@app-cn/ui`** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); the project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -36,8 +36,8 @@ Initial public release once Phase 6 (npm dual distribution) lands.
 - `StreamBubble` — AI assistant message with thinking → token-stream → settle.
 - `PromptInput` — AI composer; send button morphs into a stop with a spinning ring.
 - `ReasoningTrace` — collapsible chain-of-thought with shimmer + auto-collapse.
-- shadcn custom registry served at `appcn.dev/r/*.json`.
-- `@appcn/ui` published to npm under MIT.
+- shadcn custom registry served at `appcn.vercel.app/r/*.json`.
+- `@app-cn/ui` published to npm under MIT.
 
 [Unreleased]: https://github.com/Salah-XD/appCN/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/Salah-XD/appCN/releases/tag/v0.1.0

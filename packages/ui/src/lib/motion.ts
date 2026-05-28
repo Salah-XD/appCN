@@ -4,7 +4,7 @@ import { Easing } from "react-native-reanimated";
  * appCN motion tokens — the shared vocabulary that makes every component feel
  * like one system. Reach for these instead of hand-typing durations/easings.
  *
- * Declared as a registry dependency (`@appcn/motion`) so copy-paste consumers
+ * Declared as a registry dependency (`@app-cn/motion`) so copy-paste consumers
  * inherit the same feel.
  */
 

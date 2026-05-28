@@ -1,31 +1,48 @@
-name: Release @appcn/ui
+name: Release
 
-# Manual only. Phase 6 must succeed locally first
-# (pnpm pack --dry-run, scratch-Expo install verified).
+# Driven by Changesets. Two modes:
+#   1. push to main with pending .changeset/*.md   → opens "Version Packages" PR
+#   2. push to main with NO pending changesets     → publishes every workspace
+#      package whose version is ahead of what is on npm
+#
+# Manual dry-run via workflow_dispatch remains available for break-glass:
+# rebuilds, packs, and inspects tarballs without publishing.
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'apps/web/**'
+      - 'apps/showcase/**'
+      - '**/*.md'
+      - 'docs/**'
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'npm dist-tag (latest, next, beta…)'
-        required: true
-        default: 'latest'
       dry-run:
-        description: 'Dry-run only (skip publish)'
+        description: 'Dry-run only (pack + inspect, skip publish)'
         required: false
         default: 'true'
         type: boolean
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
-  contents: read
-  id-token: write # required for npm OIDC trusted publishing
+  contents: write       # Changesets opens/updates the Version Packages PR
+  pull-requests: write  # same
+  id-token: write       # npm OIDC trusted publishing (post-Step-6 migration)
 
 jobs:
-  publish:
+  release:
+    name: Version or publish
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     environment: npm-publish
+    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Changesets reads tags + full history for changelogs
 
       - uses: pnpm/action-setup@v4
         with:
@@ -40,20 +57,74 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Verify package metadata
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build CLI
+        run: pnpm --filter @app-cn/cli build
+
+      - name: Create Release PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          publish: pnpm release
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Summarize published packages
+        if: steps.changesets.outputs.published == 'true'
         run: |
-          node -e "const pkg = require('./packages/ui/package.json'); if (pkg.private) { console.error('packages/ui still marked private'); process.exit(1); } console.log('Publishing', pkg.name, pkg.version);"
+          echo "## Published" >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.changesets.outputs.publishedPackages }}' | \
+            node -e 'const pkgs=JSON.parse(require("fs").readFileSync(0,"utf8"));for(const p of pkgs){console.log(`- \`${p.name}@${p.version}\``)}' \
+            >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Pack (always)
-        run: pnpm --filter @appcn/ui pack --pack-destination ./dist-tarball
+  dry-run:
+    name: Manual dry-run (pack only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Inspect tarball
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build CLI
+        run: pnpm --filter @app-cn/cli build
+
+      - name: Pack @app-cn/ui
+        run: pnpm --filter @app-cn/ui pack --pack-destination ./dist-tarball
+
+      - name: Pack @app-cn/cli
+        run: pnpm --filter @app-cn/cli pack --pack-destination ./dist-tarball
+
+      - name: Inspect tarballs
         run: |
           ls -la dist-tarball
-          tar -tzf dist-tarball/*.tgz | head -40
+          for tgz in dist-tarball/*.tgz; do
+            echo "::group::$tgz"
+            tar -tzf "$tgz" | head -40
+            echo "::endgroup::"
+          done
 
-      - name: Publish to npm
+      - name: Fail if not a dry-run
         if: ${{ inputs.dry-run == false }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm --filter @appcn/ui publish --no-git-checks --tag ${{ inputs.tag }} --provenance --access public
+        run: |
+          echo "::error::dry-run=false on workflow_dispatch is intentionally disabled."
+          echo "Use the push-driven Changesets flow for real publishes."
+          exit 1

@@ -1,7 +1,7 @@
-# @appcn/ui
+# @app-cn/ui
 
-[![npm](https://img.shields.io/npm/v/%40appcn%2Fui)](https://www.npmjs.com/package/@appcn/ui)
-[![license](https://img.shields.io/npm/l/%40appcn%2Fui)](./LICENSE)
+[![npm](https://img.shields.io/npm/v/%40app-cn%2Fui)](https://www.npmjs.com/package/@app-cn/ui)
+[![license](https://img.shields.io/npm/l/%40app-cn%2Fui)](./LICENSE)
 
 **Copy-paste mobile components for React Native + Expo.** Motion-first,
 dark-by-default, with a featured AI-native collection.
@@ -10,21 +10,21 @@ This package can be consumed two ways — pick whichever fits your project:
 
 - **`npx shadcn add`** — copy the source straight into your repo. You own the
   code, zero lock-in.
-- **`npm install @appcn/ui`** — managed dependency. Same primitives, just
+- **`npm install @app-cn/ui`** — managed dependency. Same primitives, just
   imported.
 
-Docs and live previews: <https://appcn.dev>
+Docs and live previews: <https://appcn.vercel.app>
 
 ---
 
 ## Install (managed dep)
 
 ```bash
-npm install @appcn/ui
+npm install @app-cn/ui
 # or
-pnpm add @appcn/ui
+pnpm add @app-cn/ui
 # or
-yarn add @appcn/ui
+yarn add @app-cn/ui
 ```
 
 You'll also need the peer deps (which you almost certainly already have in
@@ -42,7 +42,7 @@ Extend your `tailwind.config.js` with appCN's preset so the components'
 classes resolve:
 
 ```js
-const appcnPreset = require("@appcn/ui/tailwind-preset");
+const appcnPreset = require("@app-cn/ui/tailwind-preset");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
-    "./node_modules/@appcn/ui/src/**/*.{ts,tsx}",
+    "./node_modules/@app-cn/ui/src/**/*.{ts,tsx}",
   ],
 };
 ```
@@ -59,7 +59,7 @@ module.exports = {
 entry:
 
 ```ts
-import "@appcn/ui/global.css";
+import "@app-cn/ui/global.css";
 ```
 
 ## Install (copy-paste via shadcn)
@@ -69,11 +69,11 @@ registry:
 
 ```bash
 # Single component (no setup)
-npx shadcn@latest add https://appcn.dev/r/button.json
+npx shadcn@latest add https://appcn.vercel.app/r/button.json
 
 # Or set up the namespaced form once in components.json
 # and use:
-npx shadcn@latest add @appcn/stream-bubble
+npx shadcn@latest add @app-cn/stream-bubble
 ```
 
 Each component pulls in its required helpers (`cn`, `motion`, `haptics`)
@@ -82,7 +82,7 @@ automatically via the shadcn registry's `registryDependencies`.
 ## Use
 
 ```tsx
-import { Button, StreamBubble, PromptInput } from "@appcn/ui";
+import { Button, StreamBubble, PromptInput } from "@app-cn/ui";
 
 export function Chat() {
   return (
@@ -104,7 +104,7 @@ export function Chat() {
 | `ReasoningTrace`  | AI       | Auto-collapses the instant the answer lands                 |
 
 Each one has full docs (anatomy, props table, examples, accessibility) at
-<https://appcn.dev/components/{slug}>, plus a QR you can scan with Expo Go
+<https://appcn.vercel.app/components/{slug}>, plus a QR you can scan with Expo Go
 to run it live on your phone.
 
 ## License

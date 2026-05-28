@@ -4,16 +4,17 @@ import { notFound } from "next/navigation";
 import {
   components,
   componentMap,
-  installCommand,
-  namespacedInstallCommand,
-  npmInstallCommand,
+  cliAddCommands,
+  installCommands,
+  namespacedInstallCommands,
+  npmInstallCommands,
 } from "@/lib/registry";
 import { siteConfig } from "@/lib/config";
 import { readComponentSource } from "@/lib/source";
 import { ComponentPreview } from "@/components/preview/component-preview";
 import { InstallTabs } from "@/components/preview/install-tabs";
 import { CodeBlock } from "@/components/ui/code-block";
-import type { ComponentMeta, PropDoc } from "@appcn/ui/lib/meta";
+import type { ComponentMeta, PropDoc } from "@app-cn/ui/lib/meta";
 
 export function generateStaticParams() {
   return components.map((c) => ({ slug: c.slug }));
@@ -52,22 +53,28 @@ export default async function ComponentPage({
         <InstallTabs
           options={[
             {
-              id: "shadcn-url",
-              label: "shadcn (URL)",
-              command: installCommand(entry.registryItem, siteConfig.registryBaseUrl),
-              hint: "Works without setup. Copies the source into your project.",
+              id: "cli",
+              label: "appcn CLI",
+              commands: cliAddCommands(entry.slug),
+              hint: "Recommended. Configures NativeWind + Reanimated and registers @app-cn on first run.",
             },
             {
               id: "shadcn-ns",
               label: "shadcn (namespaced)",
-              command: namespacedInstallCommand(entry.registryItem),
-              hint: 'Requires "@appcn" registered in your project\'s components.json.',
+              commands: namespacedInstallCommands(entry.registryItem),
+              hint: "Use after `appcn init` adds the @app-cn registry to your components.json.",
             },
             {
-              id: "npm",
-              label: "npm",
-              command: npmInstallCommand(),
-              hint: "Imports from @appcn/ui. Available in 0.1.0+.",
+              id: "shadcn-url",
+              label: "shadcn (URL)",
+              commands: installCommands(entry.registryItem, siteConfig.registryBaseUrl),
+              hint: "No setup required. Best for one-off copies.",
+            },
+            {
+              id: "library",
+              label: "npm package",
+              commands: npmInstallCommands(),
+              hint: "Managed dep. Requires NativeWind + tailwind-preset configured in the consumer app.",
             },
           ]}
         />
@@ -76,7 +83,7 @@ export default async function ComponentPage({
         <ComponentPreview
           slug={entry.slug}
           source={source}
-          installCommand={installCommand(entry.registryItem, siteConfig.registryBaseUrl)}
+          installCommand={cliAddCommands(entry.slug).npm}
           showcaseWebUrl={siteConfig.showcaseWebUrl}
           expoUrl={siteConfig.expoUrl}
         />

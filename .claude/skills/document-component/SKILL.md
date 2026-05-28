@@ -96,7 +96,7 @@ Report:
 1. The meta file path.
 2. Anything ambiguous about the component that you had to make a judgment
    call on (so the maintainer can correct it).
-3. If `pnpm --filter @appcn/web dev` is running, confirm
+3. If `pnpm --filter @app-cn/web dev` is running, confirm
    `/components/<slug>` now renders all docs sections.
 
 Do **not** commit unless the user asks.

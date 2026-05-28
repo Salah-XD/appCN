@@ -1,5 +1,5 @@
 {
-  "name": "@appcn/web",
+  "name": "@app-cn/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "registry:build": "npx --yes shadcn@latest build && node scripts/fix-registry-imports.mjs"
+    "clean:registry": "node -e \"require('node:fs').rmSync('public/r',{recursive:true,force:true})\"",
+    "registry:build": "pnpm clean:registry && npx --yes shadcn@latest build && node scripts/fix-registry-imports.mjs && node scripts/validate-registry.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
