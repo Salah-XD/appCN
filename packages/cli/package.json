@@ -1,6 +1,6 @@
 {
   "name": "@app-cn/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Init + add CLI for appCN. RN-aware shadcn registry helper for Expo and bare React Native.",
   "keywords": [
     "react-native",
