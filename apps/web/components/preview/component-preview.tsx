@@ -4,6 +4,7 @@ import * as React from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 import { CopyButton } from "@/components/ui/copy-button";
+import { siteConfig } from "@/lib/config";
 
 type Tab = "phone" | "web" | "video" | "code";
 
@@ -30,7 +31,15 @@ export function ComponentPreview({
   const [tab, setTab] = React.useState<Tab>("phone");
 
   const webSrc = `${showcaseWebUrl}/c/${slug}`;
-  const phoneLink = expoUrl ? `${expoUrl}/--/c/${slug}` : webSrc;
+  const universalLink = `${siteConfig.docsOrigin}/components/${slug}`;
+  // Priority order — what the QR encodes:
+  //   1. expoUrl (LAN dev, e.g. exp://192.168.x.x:8081) → deep-links into Expo Go
+  //   2. expoGoQrUrl (production Expo Go channel) → loads the published project
+  //   3. universalLink → graceful fallback (today: this docs page; later when
+  //      the Play Store build ships, an Android App Link into the installed app)
+  const phoneLink = expoUrl
+    ? `${expoUrl}/--/components/${slug}`
+    : siteConfig.expoGoQrUrl || universalLink;
 
   return (
     <div className="overflow-hidden rounded-3xl border border-border bg-card">
@@ -85,6 +94,7 @@ function PhoneTab({
   phoneLink: string;
   hasExpoUrl: boolean;
 }) {
+  const { expoGoQrUrl } = siteConfig;
   return (
     <div className="flex flex-col items-center gap-5 py-4 text-center">
       <div className="rounded-2xl bg-white p-4">
@@ -92,24 +102,55 @@ function PhoneTab({
       </div>
       <div className="max-w-sm space-y-1">
         <p className="font-medium text-foreground">
-          Scan to run it on your real phone
+          Scan with Expo Go to run it live
         </p>
         <p className="text-sm text-muted-foreground">
-          Open the Camera or Expo Go app and scan — the component runs live on
-          your device with real native motion &amp; gestures.
+          Install <strong className="text-foreground">Expo Go</strong> on
+          Android or iPhone, scan, and the entire appCN gallery loads — real
+          native motion &amp; gestures, not a web shim.
         </p>
-        {!hasExpoUrl && (
+        {hasExpoUrl && (
           <p className="pt-2 text-xs text-muted-foreground/80">
-            Tip: set <code className="text-primary">NEXT_PUBLIC_EXPO_URL</code>{" "}
-            (e.g. <code>exp://192.168.x.x:8081</code>) to deep-link straight into
-            Expo Go.
+            Dev mode: <code className="text-primary">NEXT_PUBLIC_EXPO_URL</code>{" "}
+            is set — the QR points at your LAN Expo server.
           </p>
         )}
       </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+        <a
+          href={expoGoQrUrl || "/docs/mobile-app"}
+          target={expoGoQrUrl ? "_blank" : undefined}
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground px-3.5 py-2 text-xs font-semibold text-background transition-colors hover:bg-foreground/90"
+        >
+          <ExpoBadgeIcon /> Open in Expo Go
+        </a>
+        <span className="inline-flex items-center gap-2 rounded-full border border-dashed border-border bg-background/40 px-3.5 py-2 text-xs font-semibold text-muted-foreground">
+          <PlayBadgeIcon /> Play Store — coming soon
+        </span>
+      </div>
+
       <code className="break-all rounded-lg bg-background px-3 py-2 text-xs text-muted-foreground">
         {phoneLink}
       </code>
     </div>
+  );
+}
+
+function PlayBadgeIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M3 2.5v19l8.5-9.5L3 2.5zm9.6 9.5L4.7 3.6l11.4 6.6-3.5 1.8zM4.7 20.4l7.9-8.4 3.5 1.8-11.4 6.6zm12.6-7.1 3.4-2c.6-.4.6-1.2 0-1.6l-3.4-2-3.8 2.2 3.8 2.4z" />
+    </svg>
+  );
+}
+
+function ExpoBadgeIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M11.3 5.4c.2-.3.5-.4.7-.4h.1c.3 0 .5.1.7.4l9 14.5c.4.6-.1 1.4-.9 1.4H3.1c-.8 0-1.3-.8-.9-1.4l9.1-14.5zM12 8 4.8 19.3h14.4L12 8z" />
+    </svg>
   );
 }
 

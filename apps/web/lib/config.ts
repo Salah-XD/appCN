@@ -27,4 +27,22 @@ export const siteConfig = {
    */
   registryBaseUrl:
     process.env.NEXT_PUBLIC_REGISTRY_URL ?? "https://appcn.vercel.app/r",
+  /**
+   * Google Play listing for the appCN mobile preview app
+   * (digital.shineup.appcn). Set via NEXT_PUBLIC_PLAY_STORE_URL after first
+   * Play Console publish.
+   */
+  playStoreUrl:
+    process.env.NEXT_PUBLIC_PLAY_STORE_URL ??
+    "https://play.google.com/store/apps/details?id=digital.shineup.appcn",
+  /**
+   * EAS-generated qr.expo.dev short link for the production update channel.
+   * iPhone users scan this with Expo Go to load appCN. Empty until first
+   * `eas update --branch production` run produces a sharable link from the
+   * EAS dashboard — set NEXT_PUBLIC_EXPO_GO_URL in Vercel after that.
+   */
+  expoGoQrUrl: process.env.NEXT_PUBLIC_EXPO_GO_URL ?? "",
+  /** Origin used to build Universal/App Link QR codes for the docs site. */
+  docsOrigin:
+    process.env.NEXT_PUBLIC_DOCS_ORIGIN ?? "https://appcn.vercel.app",
 };

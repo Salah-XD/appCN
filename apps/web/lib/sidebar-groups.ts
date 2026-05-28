@@ -29,7 +29,10 @@ export function getSidebarGroups(): SidebarGroup[] {
   return [
     {
       title: "Getting Started",
-      links: [{ href: "/docs/cli", label: "CLI", iconName: "terminal" }],
+      links: [
+        { href: "/docs/cli", label: "CLI", iconName: "terminal" },
+        { href: "/docs/mobile-app", label: "Mobile app", iconName: "smartphone" },
+      ],
     },
     {
       title: "Base",

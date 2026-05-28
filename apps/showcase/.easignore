@@ -1,0 +1,21 @@
+# EAS Build uploads the workspace root when this is a monorepo project.
+# Exclude things the build never needs.
+
+# Other workspace apps
+../web
+
+# Generated docs registry artifacts (not needed in the mobile build)
+../../apps/web/.next
+../../apps/web/public/r
+../../apps/web/out
+
+# Dev/test artifacts
+**/*.log
+**/.DS_Store
+**/coverage
+**/.turbo
+
+# Local credentials — never upload these
+google-play-service-account.json
+*.keystore
+*.jks

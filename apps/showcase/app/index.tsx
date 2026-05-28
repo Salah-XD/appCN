@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Link } from "expo-router";
+import Constants from "expo-constants";
+import * as Linking from "expo-linking";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, {
@@ -10,6 +12,8 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { demos, type Demo, type DemoCategory } from "../lib/demos";
+
+const DOCS_URL = "https://appcn.vercel.app";
 
 const PRESS_SPRING = { mass: 0.5, damping: 18, stiffness: 320 };
 
@@ -46,8 +50,31 @@ export default function Gallery() {
             <DemoCard key={d.slug} demo={d} index={ai.length + i} />
           ))}
         </Section>
+
+        <Footer />
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function Footer() {
+  const version = Constants.expoConfig?.version ?? "0.0.0";
+  return (
+    <View className="mt-10 items-center gap-2 px-6">
+      <Pressable
+        accessibilityRole="link"
+        accessibilityLabel="Open appCN documentation"
+        onPress={() => Linking.openURL(DOCS_URL)}
+        className="rounded-full border border-border bg-card/60 px-4 py-2"
+      >
+        <Text className="text-xs font-medium text-foreground">
+          About appCN  →  appcn.vercel.app
+        </Text>
+      </Pressable>
+      <Text className="text-[10px] uppercase tracking-[2px] text-muted-foreground/70">
+        v{version}
+      </Text>
+    </View>
   );
 }
 

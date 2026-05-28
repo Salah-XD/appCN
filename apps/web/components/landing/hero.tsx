@@ -100,11 +100,23 @@ export function Hero() {
 
       <div className="relative mx-auto grid max-w-7xl gap-12 px-5 pb-24 pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-16 lg:pb-32 lg:pt-16">
         <div>
-          <div className="hero-pill inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/70 px-3 py-1.5 text-xs backdrop-blur">
-            <LogoMark className="h-3.5 w-3.5 text-primary" />
-            <span className="text-muted-foreground">
-              v0.1 early access · React Native + Expo
+          <div className="hero-pill inline-flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/70 px-3 py-1.5 text-xs backdrop-blur">
+              <LogoMark className="h-3.5 w-3.5 text-primary" />
+              <span className="text-muted-foreground">
+                v0.1 early access · React Native + Expo
+              </span>
             </span>
+            <Link
+              href="/docs/mobile-app"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/70 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:bg-card hover:text-foreground"
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              Live in Expo Go · Play Store soon
+            </Link>
           </div>
 
           <h1 className="mt-7 font-sans text-[clamp(2.6rem,7vw,5.4rem)] font-bold leading-[0.95] tracking-[-0.03em]">

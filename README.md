@@ -16,13 +16,17 @@ orb.
 [![Stars](https://img.shields.io/github/stars/Salah-XD/appCN?style=flat&color=8b5cf6&labelColor=18181b)](https://github.com/Salah-XD/appCN/stargazers)
 
 [![React Native](https://img.shields.io/badge/React%20Native-0.81-61dafb?logo=react&logoColor=white&labelColor=18181b)](https://reactnative.dev)
-[![Expo SDK 54](https://img.shields.io/badge/Expo-SDK%2054-000020?logo=expo&logoColor=white&labelColor=18181b)](https://expo.dev)
+[![Expo SDK 54](https://img.shields.io/badge/Expo-SDK%2054-1B69B4?logo=expo&logoColor=white&labelColor=18181b)](https://expo.dev)
 [![NativeWind 4](https://img.shields.io/badge/NativeWind-4-38bdf8?logo=tailwindcss&logoColor=white&labelColor=18181b)](https://www.nativewind.dev)
 [![Reanimated 4](https://img.shields.io/badge/Reanimated-4-9333ea?labelColor=18181b)](https://docs.swmansion.com/react-native-reanimated/)
 [![Built with pnpm](https://img.shields.io/badge/pnpm-9.15-f9ad00?logo=pnpm&logoColor=white&labelColor=18181b)](https://pnpm.io)
 
+[![Open in Expo Go](https://img.shields.io/badge/Expo%20Go-Live%20on%20Android%20%26%20iPhone-1B69B4?logo=expo&logoColor=white&labelColor=18181b)](https://appcn.vercel.app/docs/mobile-app)
+[![Play Store — Coming soon](https://img.shields.io/badge/Google%20Play-Coming%20soon-9ca3af?logo=googleplay&logoColor=white&labelColor=18181b)](https://appcn.vercel.app/docs/mobile-app)
+
 **[Browse components](https://appcn.vercel.app/components)** ·
 **[CLI docs](https://appcn.vercel.app/docs/cli)** ·
+**[Mobile app](https://appcn.vercel.app/docs/mobile-app)** ·
 **[Live showcase](https://appcn-showcase.vercel.app)** ·
 **[GitHub](https://github.com/Salah-XD/appCN)**
 
@@ -60,6 +64,11 @@ npm install @app-cn/ui
 ---
 
 ## What's in the box
+
+> **New:** appCN is live on real phones — scan a QR with **[Expo Go](https://appcn.vercel.app/docs/mobile-app)**
+> and the entire component gallery loads on Android or iPhone in seconds.
+> No emulator, no developer account. Standalone Play Store APK is in review —
+> shipping soon.
 
 ### Base
 
@@ -105,6 +114,7 @@ on every surface. → **[appcn.vercel.app/components](https://appcn.vercel.app/c
 | :-- | :-- |
 | **[appcn.vercel.app](https://appcn.vercel.app)** | Live docs site — landing, every component, live previews |
 | **[CLI docs](https://appcn.vercel.app/docs/cli)** | `init`, `add`, env vars, the idempotency contract |
+| **[Mobile app](https://appcn.vercel.app/docs/mobile-app)** | Play Store + Expo Go install paths, deep-link contract |
 | **[`CLAUDE.md`](./CLAUDE.md)** | Architecture, monorepo map, commands, Metro/Reanimated gotchas |
 | **[`DESIGN.md`](./DESIGN.md)** | Taste layer — motion rules, the "one delight detail" rule, the 8-step SOP |
 | **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** | Dev setup, the Changesets release flow, PR conventions |

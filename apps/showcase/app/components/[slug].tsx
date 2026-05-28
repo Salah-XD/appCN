@@ -4,11 +4,10 @@ import { useLocalSearchParams } from "expo-router";
 import { ComponentScreen } from "../../components/ComponentScreen";
 
 /**
- * Docs-iframe preview path. Chromeless on purpose — the docs site frames it
- * inside its own UI. For deep-linked installs from the docs URL we also
- * expose the same screen at `/components/[slug]`.
+ * Universal Link target — matches the docs URL `appcn.vercel.app/components/<slug>`
+ * so a tapped link opens straight into the installed app's preview screen.
  */
-export default function CSlug() {
+export default function ComponentsSlug() {
   const { slug, fake } = useLocalSearchParams<{
     slug: string;
     fake?: string;

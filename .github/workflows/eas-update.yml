@@ -1,0 +1,58 @@
+name: EAS Update
+
+# OTA-only pipeline. Publishes a new JS bundle to the `production` EAS Update
+# branch every time the showcase or shared UI changes. The installed app
+# (Play Store APK + Expo Go on iOS) auto-applies it on next launch.
+#
+# Native AAB rebuilds stay manual via `eas build` from a developer machine —
+# the free EAS Build tier (15 builds/month) would burn out quickly if wired
+# to every push.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/showcase/**'
+      - 'packages/ui/**'
+      - '.github/workflows/eas-update.yml'
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'EAS Update message'
+        required: false
+        default: 'Manual update'
+        type: string
+
+concurrency:
+  group: eas-update-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Publish OTA update
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish update
+        working-directory: apps/showcase
+        run: |
+          eas update \
+            --branch production \
+            --message "${{ github.event.inputs.message || format('main@{0}', github.sha) }}" \
+            --non-interactive

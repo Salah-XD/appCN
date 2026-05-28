@@ -40,6 +40,7 @@ export function SiteFooter() {
                 href: "https://www.npmjs.com/package/@app-cn/ui",
                 external: true,
               },
+              { label: "Expo Go preview", href: "/docs/mobile-app" },
               { label: "Releases", href: `${siteConfig.github}/releases`, external: true },
             ]}
           />

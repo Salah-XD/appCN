@@ -21,6 +21,11 @@ apps/showcase/ios/
 web-build/
 expo-env.d.ts
 
+# eas — local credentials, never commit
+apps/showcase/google-play-service-account.json
+apps/showcase/*.keystore
+apps/showcase/*.jks
+
 # generated registry output (built from source on deploy)
 apps/web/public/r/
 
