@@ -54,8 +54,24 @@ export function SiteFooter() {
           />
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-border/60 pt-8 text-sm text-muted-foreground sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} appCN — you own the code.</p>
+        <div className="mt-16 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-8 text-sm text-muted-foreground sm:flex-row sm:items-center">
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span>© {new Date().getFullYear()} appCN — you own the code.</span>
+            <span className="hidden sm:inline" aria-hidden>
+              ·
+            </span>
+            <span>
+              Powered by{" "}
+              <a
+                href="https://www.shineup.digital"
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-foreground/90 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Shineup
+              </a>
+            </span>
+          </p>
           <p className="font-mono text-xs uppercase tracking-wider">
             Built with Expo · NativeWind · Reanimated
           </p>
