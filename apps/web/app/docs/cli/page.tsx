@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { CodeBlock } from "@/components/ui/code-block";
 import { InstallTabs } from "@/components/preview/install-tabs";
+import { LogoMark } from "@/components/brand/logo";
 import type { PackageManagerCommands } from "@/lib/registry";
 
 export const metadata = {
@@ -33,12 +34,14 @@ export default function CliDocsPage() {
             {
               id: "init",
               label: "Run init",
+              icon: <LogoMark className="h-3.5 w-3.5" />,
               commands: cliInvocation("init"),
               hint: "Detects Expo vs bare RN and your package manager. Safe to re-run.",
             },
             {
               id: "init-lib",
               label: "init --lib",
+              icon: <LogoMark className="h-3.5 w-3.5" />,
               commands: cliInvocation("init --lib"),
               hint: "Same as init, plus installs @app-cn/ui as a managed dep (skip if you only plan to copy components).",
             },
@@ -64,12 +67,14 @@ export default function CliDocsPage() {
             {
               id: "add",
               label: "Add a component",
+              icon: <LogoMark className="h-3.5 w-3.5" />,
               commands: cliInvocation("add button"),
               hint: "Replace `button` with any slug from the components index.",
             },
             {
               id: "add-yes",
               label: "Non-interactive",
+              icon: <LogoMark className="h-3.5 w-3.5" />,
               commands: cliInvocation("add button --yes"),
               hint: "Skips the components.json registry-entry prompt. Useful in scripts and CI.",
             },

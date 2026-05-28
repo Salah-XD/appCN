@@ -15,7 +15,7 @@
 
 ## Component checklist (for new components)
 
-If this PR adds a new component, all seven boxes must be ticked. The
+If this PR adds a new component, all eight boxes must be ticked. The
 canonical checklist lives in
 [`DESIGN.md → Component checklist (SOP)`](../DESIGN.md#component-checklist-sop).
 
@@ -26,6 +26,11 @@ canonical checklist lives in
 - [ ] 5. Entry added to `apps/web/lib/registry.ts`
 - [ ] 6. Entry added to `apps/web/registry.json` (with correct `registryDependencies`)
 - [ ] 7. Verified locally: `pnpm typecheck && pnpm registry:build` clean, `/c/<slug>` reachable in showcase, `/components/<slug>` renders all sections
+- [ ] 8. Changeset committed (`pnpm changeset` → `@app-cn/ui`, minor for new component / patch for bugfix)
+
+## Changeset (for any `packages/*` change)
+
+- [ ] `.changeset/*.md` file committed describing the bump — *or* N/A for docs / internal-only changes that don't ship to npm.
 
 ## Verification
 

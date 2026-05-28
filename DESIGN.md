@@ -95,9 +95,9 @@ or text glyphs in shipped code.
 
 ## Component checklist (SOP)
 
-Every component ships these seven artifacts. The PR template enforces them. Skipping any one
-means the docs page won't render, the registry will be incomplete, or the showcase QR
-won't resolve — so don't.
+Every component ships these eight artifacts. The PR template enforces them. Skipping any one
+means the docs page won't render, the registry will be incomplete, the showcase QR won't
+resolve, or the release pipeline won't pick up the bump — so don't.
 
 1. **`packages/ui/src/{components,ai}/<slug>.tsx`** — the component itself.
    - Header doc comment names the delight detail in one line.
@@ -133,11 +133,17 @@ won't resolve — so don't.
 
 7. **Verified** with this exact sequence — all four steps must pass:
    ```bash
-   pnpm typecheck                       # ui + showcase + web all clean
-   pnpm registry:build                  # emits public/r/<slug>.json with rewritten imports
+   pnpm typecheck                       # ui + cli + showcase + web all clean
+   pnpm registry:build                  # emits public/r/<slug>.json + validator passes
    pnpm --filter showcase start         # /c/<slug> reachable from the index gallery
    pnpm --filter @app-cn/web dev         # /components/<slug> renders all docs sections
    ```
+
+8. **Changeset committed.** Run `pnpm changeset` from the repo root, pick
+   `@app-cn/ui`, choose `minor` for a new component (`patch` for a bugfix to
+   an existing one), and write a one-line summary. Commit the generated
+   `.changeset/*.md` with your code change. The Changesets bot blocks PRs
+   without one; the release pipeline can't pick up an unflagged bump.
 
 If a step fails, the component isn't done — even if the .tsx itself compiles.
 

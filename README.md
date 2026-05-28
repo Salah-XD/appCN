@@ -5,12 +5,13 @@ component library: you own the source, NativeWind styles, motion-first
 defaults, and a featured AI-native collection (streaming bubbles, reasoning
 traces, voice waveforms, prompt composers).
 
-Distributed two ways:
+Distributed three ways:
 
-- **shadcn CLI** — copy individual components straight into your app.
+- **`appcn` CLI** — recommended. Sets up NativeWind + Reanimated and pulls components.
+- **shadcn CLI** — copy individual components straight in (no lock-in).
 - **npm** — install the whole library as a managed dependency.
 
-> Status: **v0.1 early access**. 5 components shipped, more landing soon.
+> Status: **v0.1.0 live on npm**. 5 components shipped, AI collection growing.
 
 ---
 
@@ -19,15 +20,21 @@ Distributed two ways:
 Pick whichever fits how you build:
 
 ```bash
-# 1. Copy-paste a single component (no lock-in)
+# 1. (Recommended) One-shot project setup, then add components by slug
+npx @app-cn/cli@latest init
+npx @app-cn/cli@latest add button
+
+# 2. Copy-paste a single component via shadcn (no setup, one-off)
 npx shadcn@latest add https://appcn.vercel.app/r/button.json
 
-# 2. Or pull the whole library as a managed dep
+# 3. Or pull the whole library as a managed dep
 npm install @app-cn/ui
 ```
 
-You'll also need the peer deps and the Tailwind preset — see
-`packages/ui/README.md` for the full setup.
+The CLI handles NativeWind + Reanimated wiring and registers the `@app-cn`
+shadcn namespace for you — see [the CLI docs](https://appcn.vercel.app/docs/cli)
+for the exact diff `init` produces. For paths (2) and (3) you'll need the
+peer deps and the Tailwind preset — see `packages/ui/README.md`.
 
 ## What's in the box
 
@@ -37,6 +44,7 @@ You'll also need the peer deps and the Tailwind preset — see
 | `StreamBubble`    | AI       | Three-phase thinking → token stream → settle                |
 | `PromptInput`     | AI       | Send morphs into a stop with a spinning ring                |
 | `ReasoningTrace`  | AI       | Auto-collapses the instant the answer lands                 |
+| `VoiceSphere`     | AI       | Reactive 3D orb that breathes with voice level              |
 
 Browse the live catalog at <https://appcn.vercel.app/components> — every component
 has a QR you can scan with Expo Go to see it run on your phone, an interactive
@@ -57,10 +65,12 @@ web preview, and a recorded video.
 
 ## Documentation
 
+- **[appcn.vercel.app/docs/cli](https://appcn.vercel.app/docs/cli)** — the
+  `appcn` CLI: `init`, `add`, env vars, the idempotency contract.
 - **[CLAUDE.md](./CLAUDE.md)** — architecture, monorepo map, commands, gotchas.
 - **[DESIGN.md](./DESIGN.md)** — taste layer, motion rules, the component SOP.
-- **[CONTRIBUTING.md](./CONTRIBUTING.md)** — dev setup, the 7-step checklist
-  for new components, release flow.
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** — dev setup, the 8-step checklist
+  for new components, the Changesets release flow.
 - **[AGENTS.md](./AGENTS.md)** — guidance for AI coding agents working in this
   repo (read first if you're Claude, Cursor, Windsurf, Codex, Aider, …).
 
@@ -87,7 +97,7 @@ the same `git push`:
 
 1. **Deploy the showcase first** (`apps/showcase`) so you have a URL.
 2. **Deploy the docs**, setting `NEXT_PUBLIC_SHOWCASE_WEB_URL` to the URL from step 1.
-3. Optional: set custom domains (`appcn.vercel.app` → docs, `showcase.appcn.vercel.app` → showcase).
+3. Optional: set custom domains (`appcn.vercel.app` → docs, `appcn-showcase.vercel.app` → showcase).
 
 ### Vercel project settings
 

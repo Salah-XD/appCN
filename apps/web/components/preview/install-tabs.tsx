@@ -3,6 +3,12 @@
 import * as React from "react";
 import { CopyButton } from "@/components/ui/copy-button";
 import {
+  BunIcon,
+  NpmIcon,
+  PnpmIcon,
+  YarnIcon,
+} from "@/components/brand/pm-icons";
+import {
   PACKAGE_MANAGERS,
   type PackageManager,
   type PackageManagerCommands,
@@ -15,6 +21,8 @@ export interface InstallOption {
   commands: PackageManagerCommands;
   /** Optional inline hint shown under the command. */
   hint?: string;
+  /** Optional brand mark shown before the label in the outer tab strip. */
+  icon?: React.ReactNode;
 }
 
 const PM_LABEL: Record<PackageManager, string> = {
@@ -22,6 +30,13 @@ const PM_LABEL: Record<PackageManager, string> = {
   pnpm: "pnpm",
   yarn: "yarn",
   bun: "bun",
+};
+
+const PM_ICONS: Record<PackageManager, React.ComponentType<{ className?: string }>> = {
+  npm: NpmIcon,
+  pnpm: PnpmIcon,
+  yarn: YarnIcon,
+  bun: BunIcon,
 };
 
 export function InstallTabs({ options }: { options: InstallOption[] }) {
@@ -47,12 +62,13 @@ export function InstallTabs({ options }: { options: InstallOption[] }) {
               aria-selected={isActive}
               onClick={() => setActiveId(o.id)}
               className={
-                "rounded-xl px-3 py-1.5 text-sm font-medium transition-colors " +
+                "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition-colors " +
                 (isActive
                   ? "bg-secondary text-foreground"
                   : "text-muted-foreground hover:text-foreground")
               }
             >
+              {o.icon}
               {o.label}
             </button>
           );
@@ -68,6 +84,7 @@ export function InstallTabs({ options }: { options: InstallOption[] }) {
         >
           {PACKAGE_MANAGERS.map((id) => {
             const isActive = id === pm;
+            const Icon = PM_ICONS[id];
             return (
               <button
                 key={id}
@@ -76,12 +93,13 @@ export function InstallTabs({ options }: { options: InstallOption[] }) {
                 aria-selected={isActive}
                 onClick={() => setPm(id)}
                 className={
-                  "rounded-md px-2.5 py-1 text-xs font-medium transition-colors " +
+                  "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors " +
                   (isActive
                     ? "bg-secondary text-foreground"
                     : "text-muted-foreground hover:text-foreground")
                 }
               >
+                <Icon className="h-3.5 w-3.5" />
                 {PM_LABEL[id]}
               </button>
             );

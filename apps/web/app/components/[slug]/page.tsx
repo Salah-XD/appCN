@@ -13,6 +13,8 @@ import { siteConfig } from "@/lib/config";
 import { readComponentSource } from "@/lib/source";
 import { ComponentPreview } from "@/components/preview/component-preview";
 import { InstallTabs } from "@/components/preview/install-tabs";
+import { LogoMark } from "@/components/brand/logo";
+import { NpmIcon, ShadcnIcon } from "@/components/brand/pm-icons";
 import { CodeBlock } from "@/components/ui/code-block";
 import type { ComponentMeta, PropDoc } from "@app-cn/ui/lib/meta";
 
@@ -55,24 +57,28 @@ export default async function ComponentPage({
             {
               id: "cli",
               label: "appcn CLI",
+              icon: <LogoMark className="h-3.5 w-3.5" />,
               commands: cliAddCommands(entry.slug),
               hint: "Recommended. Configures NativeWind + Reanimated and registers @app-cn on first run.",
             },
             {
               id: "shadcn-ns",
               label: "shadcn (namespaced)",
+              icon: <ShadcnIcon className="h-3.5 w-3.5" />,
               commands: namespacedInstallCommands(entry.registryItem),
               hint: "Use after `appcn init` adds the @app-cn registry to your components.json.",
             },
             {
               id: "shadcn-url",
               label: "shadcn (URL)",
+              icon: <ShadcnIcon className="h-3.5 w-3.5" />,
               commands: installCommands(entry.registryItem, siteConfig.registryBaseUrl),
               hint: "No setup required. Best for one-off copies.",
             },
             {
               id: "library",
               label: "npm package",
+              icon: <NpmIcon className="h-3.5 w-3.5" />,
               commands: npmInstallCommands(),
               hint: "Managed dep. Requires NativeWind + tailwind-preset configured in the consumer app.",
             },

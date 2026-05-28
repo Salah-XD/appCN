@@ -31,7 +31,7 @@ showcase QR.
 
 ## Adding a new component
 
-Every component ships seven artifacts. The PR template enforces them — there
+Every component ships eight artifacts. The PR template enforces them — there
 are no exceptions. The full checklist is in
 [`DESIGN.md → Component checklist (SOP)`](./DESIGN.md#component-checklist-sop):
 
@@ -43,9 +43,15 @@ are no exceptions. The full checklist is in
 6. Entry in `apps/web/registry.json` (shadcn manifest).
 7. Verified with `pnpm typecheck && pnpm registry:build`, `/c/<slug>`
    reachable in the showcase, `/components/<slug>` renders all sections.
+8. Changeset committed (`pnpm changeset` → pick `@app-cn/ui`, `minor` for a
+   new component). The release pipeline gates on this.
+
+> `pnpm registry:build` now also runs `apps/web/scripts/validate-registry.mjs`
+> — it'll fail loudly on orphan or malformed registry items, so a clean
+> registry build is a stronger signal than it used to be.
 
 If you're working with an AI coding agent (Claude / Cursor / Codex / Aider /
-Windsurf), invoke the `/new-component` skill — it walks the seven steps for
+Windsurf), invoke the `/new-component` skill — it walks all eight steps for
 you. See [`AGENTS.md`](./AGENTS.md) for agent-specific guidance.
 
 ## Code style
@@ -73,14 +79,27 @@ you. See [`AGENTS.md`](./AGENTS.md) for agent-specific guidance.
 
 ## Releasing (maintainers)
 
-`@app-cn/ui` is published manually for now:
+Releases are driven by [Changesets](https://github.com/changesets/changesets)
+and published via npm OIDC Trusted Publishing — no manual tags, no tokens.
 
-1. Bump `packages/ui/package.json` `version` and add a `CHANGELOG.md` entry.
-2. Tag the commit (`git tag v0.1.x && git push --tags`).
-3. Dispatch the `release.yml` workflow from the Actions tab.
+Day-to-day flow:
+
+1. Make your change.
+2. Run `pnpm changeset` from the repo root. Pick the affected packages
+   (`@app-cn/ui` and/or `@app-cn/cli`), pick a bump (patch / minor / major),
+   write a one-line summary. A `.changeset/*.md` file is generated.
+3. Commit the changeset alongside your code change. Open a PR. The
+   Changesets bot will comment confirming it found a changeset.
+4. Merge to `main`. The release workflow opens (or updates) a
+   **"Version Packages"** PR that bumps versions and rolls the
+   `.changeset/*.md` files into each package's `CHANGELOG.md`.
+5. Review and merge that PR. CI publishes the affected packages to npm
+   automatically via OIDC. Each release gets a matching GitHub Release with
+   the changelog rendered.
 
 The shadcn registry (`apps/web/public/r/*.json`) is rebuilt and deployed with
-every push to `main` via the docs site's deploy.
+every push to `main` via the docs site's Vercel deploy. The
+`registry-check.yml` workflow validates every PR's emitted JSON before merge.
 
 ## Reporting bugs / requesting components
 

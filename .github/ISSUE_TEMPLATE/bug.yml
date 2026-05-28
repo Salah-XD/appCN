@@ -19,6 +19,8 @@ body:
         - StreamBubble
         - PromptInput
         - ReasoningTrace
+        - VoiceSphere
+        - appcn CLI
         - Other / cross-component
     validations:
       required: true

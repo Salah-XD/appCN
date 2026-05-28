@@ -45,7 +45,7 @@ Confirmed-current conventions worth flagging:
   for nav links must live in a Client Component using `usePathname()`.
 - See `apps/web/AGENTS.md` for the in-app reminder.
 
-## Component SOP (the canonical seven steps)
+## Component SOP (the canonical eight steps)
 
 Every component ships these. The PR template enforces them; reviewers will
 bounce PRs that skip any one. Full version in
@@ -59,6 +59,17 @@ bounce PRs that skip any one. Full version in
 6. Entry in `apps/web/registry.json`
 7. `pnpm typecheck && pnpm registry:build` clean, `/c/<slug>` reachable in
    showcase, `/components/<slug>` renders all docs sections.
+8. Changeset committed (`pnpm changeset` → `@app-cn/ui` minor for new
+   component, patch for bugfix).
+
+## Releases / changesets
+
+Any change under `packages/ui/**` or `packages/cli/**` needs an accompanying
+`.changeset/*.md` file describing the bump. Run `pnpm changeset` interactively
+from the repo root; the bot blocks PRs without one. **Never bump `version`
+in `package.json` by hand** — Changesets owns that. The release workflow
+publishes to npm via OIDC when a "Version Packages" PR merges to main; no
+tokens, no manual tagging.
 
 ## Claude-specific helpers
 
@@ -74,14 +85,17 @@ If you're Claude Code, two project-level skills automate the chores:
 ## Verification commands (memorize these)
 
 ```bash
-pnpm typecheck                        # tsc across ui + web (+ showcase via cd)
+pnpm typecheck                        # tsc across ui + cli + web (+ showcase via cd)
 pnpm lint
-pnpm registry:build                   # shadcn build + import-fix
+pnpm registry:build                   # clean + shadcn build + import-fix + validator
+pnpm changeset status                 # are we missing a changeset for this PR?
+pnpm --filter @app-cn/cli build        # bundle the CLI with tsup
 pnpm --filter showcase start          # scan QR with Expo Go
 pnpm --filter @app-cn/web dev          # http://localhost:3100
 ```
 
-A passing `pnpm typecheck` plus `pnpm registry:build` is the minimum bar
+A passing `pnpm typecheck` plus `pnpm registry:build` plus a clean
+`pnpm changeset status` (or a fresh changeset committed) is the minimum bar
 before you say a change is done.
 
 ## Things that look like bugs but aren't

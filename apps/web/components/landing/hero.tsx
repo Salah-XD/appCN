@@ -7,16 +7,11 @@ import { gsap } from "gsap";
 
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/lib/config";
-import { InstallTabs } from "@/components/preview/install-tabs";
 import { LivePreview } from "@/components/preview/live-preview";
 import { MagneticButton } from "./magnetic";
 import { LogoMark } from "@/components/brand/logo";
-import {
-  cliAddCommands,
-  installCommands,
-  namespacedInstallCommands,
-  npmInstallCommands,
-} from "@/lib/registry";
+import { CopyButton } from "@/components/ui/copy-button";
+import { cliAddCommands } from "@/lib/registry";
 
 const heroSlug = "voice-sphere";
 
@@ -154,36 +149,7 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="hero-install mt-10 max-w-md">
-            <InstallTabs
-              options={[
-                {
-                  id: "cli",
-                  label: "appcn CLI",
-                  commands: cliAddCommands(heroSlug),
-                  hint: "Recommended. Configures NativeWind + Reanimated and registers @app-cn.",
-                },
-                {
-                  id: "shadcn-ns",
-                  label: "namespaced",
-                  commands: namespacedInstallCommands(heroSlug),
-                  hint: 'After `appcn init` adds `"@app-cn"` to your components.json.',
-                },
-                {
-                  id: "shadcn",
-                  label: "shadcn URL",
-                  commands: installCommands(heroSlug, siteConfig.registryBaseUrl),
-                  hint: "No setup. Copies the source straight in.",
-                },
-                {
-                  id: "library",
-                  label: "library",
-                  commands: npmInstallCommands(),
-                  hint: "Whole library, managed dep.",
-                },
-              ]}
-            />
-          </div>
+          <HeroInstallPill slug={heroSlug} />
         </div>
 
         <div className="hero-phone relative">
@@ -210,6 +176,36 @@ export function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Single-command install pill for the hero. Intentionally NOT the full
+ * 4-tab InstallTabs from per-component pages: on first-impression surface,
+ * decision fatigue is the enemy. One recommended command, big copy button,
+ * deep-link to the full menu on the component page.
+ */
+function HeroInstallPill({ slug }: { slug: string }) {
+  const command = cliAddCommands(slug).npm;
+  return (
+    <div className="hero-install mt-10 max-w-md">
+      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
+        <LogoMark className="h-4 w-4 shrink-0 text-foreground" />
+        <code className="flex-1 truncate font-mono text-sm text-foreground">
+          {command}
+        </code>
+        <CopyButton value={command} />
+      </div>
+      <p className="mt-2 px-1 text-xs text-muted-foreground">
+        Recommended — configures NativeWind + Reanimated.{" "}
+        <Link
+          href={`/components/${slug}`}
+          className="text-foreground/80 underline-offset-4 hover:text-foreground hover:underline"
+        >
+          Other install methods →
+        </Link>
+      </p>
+    </div>
   );
 }
 

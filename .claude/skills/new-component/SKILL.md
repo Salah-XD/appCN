@@ -1,6 +1,6 @@
 ---
 name: new-component
-description: Author a new appCN component end-to-end. Walks the seven-step SOP from DESIGN.md — component source, typed meta, exports, showcase demo, web registry entry, shadcn manifest entry, verification. Invoke when the user asks to add, create, or scaffold a new appCN component.
+description: Author a new appCN component end-to-end. Walks the eight-step SOP from DESIGN.md — component source, typed meta, exports, showcase demo, web registry entry, shadcn manifest entry, verification, changeset. Invoke when the user asks to add, create, or scaffold a new appCN component.
 ---
 
 # /new-component
@@ -165,8 +165,8 @@ imported; `@app-cn/haptics` if imported).
 Run, in order:
 
 ```bash
-pnpm typecheck                     # ui + showcase + web all clean
-pnpm registry:build                # emits public/r/<slug>.json
+pnpm typecheck                     # ui + cli + showcase + web all clean
+pnpm registry:build                # emits public/r/<slug>.json + validator passes
 pnpm --filter showcase start       # open /c/<slug>, sanity-check the demo
 pnpm --filter @app-cn/web dev       # /components/<slug> renders all sections
 ```
@@ -180,14 +180,32 @@ After all four pass:
 - Visually confirm the showcase demo on a real device via QR if at all
   possible — web preview can hide motion bugs.
 
-## Step 8 — Hand off to the user
+## Step 8 — Write the changeset
+
+This is required. The Changesets bot blocks PRs that skip it, and the
+release pipeline can't pick up the bump without one.
+
+1. Run `pnpm changeset` from the repo root.
+2. In the interactive prompts:
+   - **Which packages**: pick `@app-cn/ui` (space to toggle, enter to confirm).
+   - **Major / minor / patch**: pick `minor` for a new component.
+     `patch` only for bugfixes to an existing component.
+   - **Summary**: one sentence, present tense — e.g. `Add VoiceSphere — a
+     reactive 3D orb that breathes with voice level.`
+3. A new `.changeset/<adjective-noun-verb>.md` file is generated.
+4. Confirm `pnpm changeset status` shows the bump for `@app-cn/ui`.
+5. Include the new `.changeset/*.md` file in the hand-off list below.
+
+## Step 9 — Hand off to the user
 
 Report:
 
-1. The seven artifacts you wrote / modified, with paths.
-2. Verification results (each of the four commands).
+1. The eight artifacts you wrote / modified, with paths (including the new
+   `.changeset/*.md`).
+2. Verification results (each of the four commands plus `pnpm changeset status`).
 3. The exact install command the user can run in a consumer app:
-   `npx shadcn@latest add http://localhost:3100/r/<slug>.json`.
+   `npx @app-cn/cli@latest add <slug>` (or the bare-shadcn fallback
+   `npx shadcn@latest add http://localhost:3100/r/<slug>.json`).
 4. Anything you couldn't verify (e.g., real-device test) so the user knows
    to check it themselves.
 
