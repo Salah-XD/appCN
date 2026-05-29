@@ -2,6 +2,7 @@
   "name": "@app-cn/mcp",
   "version": "0.1.0",
   "description": "Model Context Protocol server for appCN. Lets AI coding agents discover, install, and correctly use appCN React Native components.",
+  "mcpName": "digital.shineup/appcn",
   "keywords": [
     "react-native",
     "expo",
