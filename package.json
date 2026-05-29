@@ -15,7 +15,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\" --ignore-path .gitignore",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=@app-cn/cli && changeset publish"
+    "release": "turbo run build --filter=@app-cn/cli --filter=@app-cn/mcp && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "0.7.0",

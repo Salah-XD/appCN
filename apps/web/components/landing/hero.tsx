@@ -117,6 +117,12 @@ export function Hero() {
               </span>
               Live in Expo Go · Play Store soon
             </Link>
+            <Link
+              href="/docs/mcp"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/70 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:bg-card hover:text-foreground"
+            >
+              MCP · for AI agents
+            </Link>
           </div>
 
           <h1 className="mt-7 font-sans text-[clamp(2.6rem,7vw,5.4rem)] font-bold leading-[0.95] tracking-[-0.03em]">

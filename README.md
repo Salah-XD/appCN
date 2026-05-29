@@ -58,6 +58,17 @@ npx shadcn@latest add https://appcn.vercel.app/r/voice-sphere.json
 npm install @app-cn/ui
 ```
 
+Building with an AI agent? Add the appCN **MCP server** so Claude Code, Cursor,
+or Windsurf can discover and install components for you — and write new code in
+appCN's motion/haptic style:
+
+```bash
+# Claude Code
+claude mcp add appcn -- npx -y @app-cn/mcp
+```
+
+See **[MCP docs](https://appcn.vercel.app/docs/mcp)** for Cursor / Windsurf / VS Code config.
+
 > Status: **v0.1.0 live on npm.** Five components shipped — the AI collection
 > is the marketed wedge and is the first place to land new work.
 
@@ -97,8 +108,9 @@ on every surface. → **[appcn.vercel.app/components](https://appcn.vercel.app/c
   on your device with native gestures. No emulator gymnastics.
 - **AI-native flagship.** The AI collection is the wedge — components built
   for AI apps that nobody else ships well.
-- **Triple distribution.** `appcn` CLI, shadcn registry, or `@app-cn/ui` from
-  npm. Same primitives, your call.
+- **Quadruple distribution.** The `appcn` CLI, the shadcn registry, `@app-cn/ui`
+  from npm — or the **MCP server**, so your AI coding agent installs components
+  for you. Same primitives, your call.
 - **Motion-first defaults.** Reanimated + gesture-handler, shared motion
   tokens (`duration` / `easing` / `spring`), one delight detail per component.
 - **Dark-mode first.** Designed dark, then derived to light. Premium reads as
