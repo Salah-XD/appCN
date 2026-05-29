@@ -1,5 +1,11 @@
 # @app-cn/mcp
 
+## 0.1.1
+
+### Patch Changes
+
+- [#5](https://github.com/Salah-XD/appCN/pull/5) [`c8e144f`](https://github.com/Salah-XD/appCN/commit/c8e144fa948531b6aeafac9db31f731096de1bad) Thanks [@Salah-XD](https://github.com/Salah-XD)! - Add the `mcpName` field (`digital.shineup/appcn`) so the package can be verified and listed on the official MCP Registry.
+
 ## 0.1.0
 
 ### Minor Changes
