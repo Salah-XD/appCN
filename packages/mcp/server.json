@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "digital.shineup/appcn",
+  "title": "appCN",
+  "description": "Install & correctly use appCN React Native / Expo components, streamed from the live registry.",
+  "websiteUrl": "https://appcn.vercel.app",
+  "repository": {
+    "url": "https://github.com/Salah-XD/appCN",
+    "source": "github"
+  },
+  "version": "0.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@app-cn/mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "APPCN_REGISTRY_URL",
+          "description": "Override the appCN registry base URL the server fetches from (default https://appcn.vercel.app/r).",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
