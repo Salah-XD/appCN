@@ -85,6 +85,31 @@ jobs:
             node -e 'const pkgs=JSON.parse(require("fs").readFileSync(0,"utf8"));for(const p of pkgs){console.log(`- \`${p.name}@${p.version}\``)}' \
             >> "$GITHUB_STEP_SUMMARY"
 
+      # When @app-cn/mcp was just published to npm, mirror it to the official MCP
+      # Registry. The branded `digital.shineup` namespace is DNS-verified, so it
+      # can't use GitHub OIDC — it signs with the Ed25519 key stored as a secret.
+      - name: Publish to the MCP Registry
+        if: steps.changesets.outputs.published == 'true' && contains(steps.changesets.outputs.publishedPackages, '"@app-cn/mcp"')
+        env:
+          MCP_REGISTRY_DNS_KEY: ${{ secrets.MCP_REGISTRY_DNS_KEY }}
+          MCP_PUBLISHER_VERSION: v1.7.9
+        run: |
+          set -euo pipefail
+          if [ -z "${MCP_REGISTRY_DNS_KEY:-}" ]; then
+            echo "::warning::MCP_REGISTRY_DNS_KEY secret not set — skipping MCP Registry publish (npm publish already succeeded). Add the secret to enable auto-listing."
+            exit 0
+          fi
+          # server.json should already match (version-packages hook), but re-sync defensively.
+          node scripts/sync-mcp-server-version.mjs
+          curl -sSL "https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz" \
+            | tar -xz -C /tmp mcp-publisher
+          chmod +x /tmp/mcp-publisher
+          /tmp/mcp-publisher login dns --domain=shineup.digital --private-key="$MCP_REGISTRY_DNS_KEY"
+          /tmp/mcp-publisher validate packages/mcp/server.json
+          /tmp/mcp-publisher publish packages/mcp/server.json
+          echo "## MCP Registry" >> "$GITHUB_STEP_SUMMARY"
+          echo "Published \`digital.shineup/appcn\` from packages/mcp/server.json." >> "$GITHUB_STEP_SUMMARY"
+
   dry-run:
     name: Manual dry-run (pack only)
     runs-on: ubuntu-latest
