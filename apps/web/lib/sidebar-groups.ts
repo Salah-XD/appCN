@@ -31,6 +31,7 @@ export function getSidebarGroups(): SidebarGroup[] {
       title: "Getting Started",
       links: [
         { href: "/docs/cli", label: "CLI", iconName: "terminal" },
+        { href: "/docs/mcp", label: "MCP (AI agents)", iconName: "plug" },
         { href: "/docs/mobile-app", label: "Mobile app", iconName: "smartphone" },
       ],
     },

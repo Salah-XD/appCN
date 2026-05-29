@@ -15,6 +15,7 @@ on:
     paths:
       - 'packages/ui/**'
       - 'packages/cli/**'
+      - 'packages/mcp/**'
       - '.changeset/**'
       - '.github/workflows/release.yml'
   workflow_dispatch:
@@ -60,8 +61,8 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Build CLI
-        run: pnpm --filter @app-cn/cli build
+      - name: Build publishable packages
+        run: pnpm --filter @app-cn/cli --filter @app-cn/mcp build
 
       - name: Create Release PR or publish
         id: changesets
@@ -102,14 +103,17 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build CLI
-        run: pnpm --filter @app-cn/cli build
+      - name: Build CLI + MCP
+        run: pnpm --filter @app-cn/cli --filter @app-cn/mcp build
 
       - name: Pack @app-cn/ui
         run: pnpm --filter @app-cn/ui pack --pack-destination ./dist-tarball
 
       - name: Pack @app-cn/cli
         run: pnpm --filter @app-cn/cli pack --pack-destination ./dist-tarball
+
+      - name: Pack @app-cn/mcp
+        run: pnpm --filter @app-cn/mcp pack --pack-destination ./dist-tarball
 
       - name: Inspect tarballs
         run: |

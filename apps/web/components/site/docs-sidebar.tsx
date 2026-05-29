@@ -6,6 +6,7 @@ import * as React from "react";
 import {
   ChevronLeft,
   ChevronRight,
+  Plug,
   Smartphone,
   Sparkles,
   Square,
@@ -43,13 +44,19 @@ function getCollapsedServerSnapshot(): boolean {
   return false;
 }
 
-export type SidebarIconName = "terminal" | "square" | "sparkles" | "smartphone";
+export type SidebarIconName =
+  | "terminal"
+  | "square"
+  | "sparkles"
+  | "smartphone"
+  | "plug";
 
 const ICON_MAP: Record<SidebarIconName, LucideIcon> = {
   terminal: Terminal,
   square: Square,
   sparkles: Sparkles,
   smartphone: Smartphone,
+  plug: Plug,
 };
 
 export type SidebarLink = {
