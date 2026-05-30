@@ -46,6 +46,13 @@ export const meta: ComponentMeta = {
       description: "Change this value to replay the animation from the start.",
     },
     {
+      name: "animate",
+      type: "boolean",
+      default: "true",
+      description:
+        "When false, the bubble renders its settled final state immediately — no thinking, stream, or settle. Use for already-finished messages so they don't re-animate.",
+    },
+    {
       name: "className",
       type: "string",
       description: "Extra NativeWind classes merged onto the bubble container.",
@@ -84,4 +91,5 @@ return (
     "Tool chips inherit their text as accessible content — no extra label needed.",
   ],
   addedAt: "2026-05-28",
+  updatedAt: "2026-05-30",
 };

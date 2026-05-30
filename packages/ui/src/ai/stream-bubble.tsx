@@ -59,6 +59,12 @@ export interface StreamBubbleProps {
   speed?: number;
   /** Change this value to replay the animation from the start. */
   replayKey?: string | number;
+  /**
+   * When false, the bubble renders its settled "done" state immediately — no
+   * thinking dots, no token reveal, no settle pulse. Use for already-finished
+   * messages (e.g. chat history) so they don't re-animate on mount/scroll.
+   */
+  animate?: boolean;
   className?: string;
 }
 
@@ -77,6 +83,7 @@ export function StreamBubble({
   chunkSize = 2,
   speed = 28,
   replayKey,
+  animate = true,
   className,
 }: StreamBubbleProps) {
   const reduced = useReducedMotion();
@@ -84,7 +91,7 @@ export function StreamBubble({
   const [shown, setShown] = React.useState(0);
 
   React.useEffect(() => {
-    if (reduced) {
+    if (reduced || !animate) {
       setPhase("done");
       setShown(content.length);
       return;
@@ -93,7 +100,7 @@ export function StreamBubble({
     setShown(0);
     const t = setTimeout(() => setPhase("streaming"), thinkingDuration);
     return () => clearTimeout(t);
-  }, [content, thinkingDuration, replayKey, reduced]);
+  }, [content, thinkingDuration, replayKey, reduced, animate]);
 
   React.useEffect(() => {
     if (phase !== "streaming") return;
