@@ -170,6 +170,7 @@ export function Chat({
             onContentSizeChange={onContentSizeChange}
             scrollEventThrottle={16}
             keyboardShouldPersistTaps="handled"
+            style={{ flex: 1, minHeight: 0 }}
             contentContainerStyle={{
               padding: 14,
               gap: 12,
