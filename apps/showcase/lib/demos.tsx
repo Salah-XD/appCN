@@ -3,10 +3,12 @@ import { Platform, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import {
   Button,
+  Chat,
   PromptInput,
   ReasoningTrace,
   StreamBubble,
   VoiceSphere,
+  type ChatMessage,
   type PromptAttachment,
 } from "@app-cn/ui";
 
@@ -293,6 +295,74 @@ function SphereInteractiveDemo() {
   );
 }
 
+const CHAT_REPLIES: Record<string, string> = {
+  default:
+    "appCN is a copy-paste component system for React Native + Expo. Tell me what screen you want and I'll show you the pieces.",
+  button:
+    "Add one with: npx shadcn@latest add @app-cn/button. It ships a Reanimated press-scale and variants out of the box.",
+  reanimated:
+    "Reanimated runs your animations on the UI thread, so they stay at 60fps even when JS is busy. appCN leans on it for every motion token.",
+};
+
+function pickReply(text: string): string {
+  const t = text.toLowerCase();
+  if (t.includes("button")) return CHAT_REPLIES.button;
+  if (t.includes("reanimated") || t.includes("animat")) return CHAT_REPLIES.reanimated;
+  return CHAT_REPLIES.default;
+}
+
+/** Controlled Chat with a scripted assistant so the preview feels alive. */
+function ChatDemo() {
+  const [messages, setMessages] = React.useState<ChatMessage[]>([]);
+  const [generating, setGenerating] = React.useState(false);
+  const timers = React.useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  React.useEffect(
+    () => () => timers.current.forEach(clearTimeout),
+    []
+  );
+
+  const send = React.useCallback((text: string) => {
+    const userId = `u${Date.now()}`;
+    const aId = `a${Date.now()}`;
+    setMessages((m) => [
+      ...m,
+      { id: userId, role: "user", content: text },
+      { id: aId, role: "assistant", content: pickReply(text), status: "streaming" },
+    ]);
+    setGenerating(true);
+    // Let StreamBubble run its thinking→stream, then settle.
+    const t = setTimeout(() => {
+      setMessages((m) =>
+        m.map((x) => (x.id === aId ? { ...x, status: "done" } : x))
+      );
+      setGenerating(false);
+    }, 2600);
+    timers.current.push(t);
+  }, []);
+
+  return (
+    <View style={{ height: 560, width: "100%" }}>
+      <Chat
+        messages={messages}
+        generating={generating}
+        onSendMessage={send}
+        onRegenerate={(id) =>
+          setMessages((m) =>
+            m.map((x) => (x.id === id ? { ...x, status: "streaming" } : x))
+          )
+        }
+        starters={[
+          "What can you build?",
+          "How do I add a button?",
+          "Why use reanimated?",
+        ]}
+        onNewChat={() => setMessages([])}
+      />
+    </View>
+  );
+}
+
 /**
  * Single source of truth for what the showcase renders. Each entry is
  * deep-linkable at /c/<slug> so the docs site can QR-code straight to it.
@@ -356,6 +426,14 @@ export const demos: Demo[] = [
       "True-3D particle sphere that breathes when idle and ripples with sound when active.",
     category: "ai",
     render: () => <SphereDemo />,
+  },
+  {
+    slug: "chat",
+    title: "Chat",
+    description:
+      "The AI chat block: streaming replies, a docked composer, starter prompts, and magnetic stream-follow.",
+    category: "ai",
+    render: () => <ChatDemo />,
   },
 ];
 
