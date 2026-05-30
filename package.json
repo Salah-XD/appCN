@@ -14,7 +14,7 @@
     "clean": "turbo run clean",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\" --ignore-path .gitignore",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && node scripts/sync-mcp-server-version.mjs",
     "release": "turbo run build --filter=@app-cn/cli --filter=@app-cn/mcp && changeset publish"
   },
   "devDependencies": {
