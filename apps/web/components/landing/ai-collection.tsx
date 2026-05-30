@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { components } from "@/lib/registry";
+import { components, isBlock } from "@/lib/registry";
 import { siteConfig } from "@/lib/config";
 import { Reveal } from "./reveal";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
  * Each card holds a phone-aspect iframe live preview.
  */
 export function AICollection() {
-  const ai = components.filter((c) => c.category === "ai");
+  const ai = components.filter((c) => c.category === "ai" && !isBlock(c));
 
   return (
     <section className="relative border-y border-border/40 bg-background py-20 lg:py-24">

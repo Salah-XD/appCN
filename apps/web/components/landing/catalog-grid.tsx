@@ -51,7 +51,7 @@ export function CatalogGrid() {
                     <h3 className="text-lg font-semibold tracking-tight text-foreground">
                       {c.title}
                     </h3>
-                    <CategoryBadge category={c.category} />
+                    <CategoryBadge category={c.category} kind={c.meta.kind} />
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {c.description}
@@ -70,7 +70,14 @@ export function CatalogGrid() {
   );
 }
 
-function CategoryBadge({ category }: { category: "base" | "ai" }) {
+function CategoryBadge({ category, kind }: { category: "base" | "ai"; kind?: "primitive" | "block" }) {
+  if (kind === "block") {
+    return (
+      <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+        Block
+      </span>
+    );
+  }
   if (category === "ai") {
     return (
       <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">

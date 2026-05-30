@@ -4,6 +4,7 @@ export const meta: ComponentMeta = {
   slug: "chat",
   title: "Chat",
   category: "ai",
+  kind: "block",
   description:
     "The AI chat block — a complete, drop-in conversation: streaming assistant bubbles, a docked composer, reasoning, and starter prompts.",
   anatomy:

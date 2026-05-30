@@ -6,6 +6,7 @@ import * as React from "react";
 import {
   ChevronLeft,
   ChevronRight,
+  Layers,
   Plug,
   Smartphone,
   Sparkles,
@@ -49,7 +50,8 @@ export type SidebarIconName =
   | "square"
   | "sparkles"
   | "smartphone"
-  | "plug";
+  | "plug"
+  | "layers";
 
 const ICON_MAP: Record<SidebarIconName, LucideIcon> = {
   terminal: Terminal,
@@ -57,6 +59,7 @@ const ICON_MAP: Record<SidebarIconName, LucideIcon> = {
   sparkles: Sparkles,
   smartphone: Smartphone,
   plug: Plug,
+  layers: Layers,
 };
 
 export type SidebarLink = {

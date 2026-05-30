@@ -1,4 +1,4 @@
-import { components, type ComponentEntry } from "@/lib/registry";
+import { blocks, components, isBlock, type ComponentEntry } from "@/lib/registry";
 import { getBadge } from "@/lib/badges";
 import type {
   SidebarGroup,
@@ -38,14 +38,23 @@ export function getSidebarGroups(): SidebarGroup[] {
     {
       title: "Base",
       links: components
-        .filter((c) => c.category === "base")
+        .filter((c) => c.category === "base" && !isBlock(c))
         .map(toSidebarLink),
     },
     {
       title: "AI-native",
       links: components
-        .filter((c) => c.category === "ai")
+        .filter((c) => c.category === "ai" && !isBlock(c))
         .map(toSidebarLink),
+    },
+    {
+      title: "Blocks",
+      links: blocks.map((entry) => ({
+        href: `/components/${entry.slug}`,
+        label: entry.title,
+        iconName: "layers" as const,
+        badge: getBadge(entry.meta) ?? undefined,
+      })),
     },
   ];
 }

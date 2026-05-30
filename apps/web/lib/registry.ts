@@ -85,6 +85,13 @@ export const componentMap: Record<string, ComponentEntry> = Object.fromEntries(
   components.map((c) => [c.slug, c])
 );
 
+/** Blocks = composite, drop-in screens (marketed separately from primitives). */
+export const isBlock = (c: ComponentEntry): boolean => c.meta.kind === "block";
+/** Components that are NOT blocks (the base + AI primitives). */
+export const primitives = components.filter((c) => !isBlock(c));
+/** The marketed blocks (e.g. the AI chat block). */
+export const blocks = components.filter(isBlock);
+
 /** Package managers we surface in install tabs. */
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 

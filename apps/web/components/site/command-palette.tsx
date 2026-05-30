@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FileText, Search, Sparkles, Square, Terminal } from "lucide-react";
+import { FileText, Layers, Search, Sparkles, Square, Terminal } from "lucide-react";
 import * as React from "react";
 
 import {
@@ -12,7 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { components } from "@/lib/registry";
+import { components, isBlock } from "@/lib/registry";
 import { useHotkey } from "@/lib/use-hotkey";
 import { useIsClient } from "@/lib/use-is-client";
 
@@ -90,9 +90,27 @@ export function CommandPaletteTrigger() {
             ))}
           </CommandGroup>
 
+          <CommandGroup heading="Blocks">
+            {components
+              .filter(isBlock)
+              .map((c) => (
+                <CommandItem
+                  key={c.slug}
+                  value={`${c.title} ${c.slug} ${c.description}`}
+                  onSelect={() => go(`/components/${c.slug}`)}
+                >
+                  <Layers className="h-4 w-4" />
+                  <span>{c.title}</span>
+                  <span className="ml-auto truncate text-xs text-muted-foreground">
+                    {c.description}
+                  </span>
+                </CommandItem>
+              ))}
+          </CommandGroup>
+
           <CommandGroup heading="Base components">
             {components
-              .filter((c) => c.category === "base")
+              .filter((c) => c.category === "base" && !isBlock(c))
               .map((c) => (
                 <CommandItem
                   key={c.slug}
@@ -110,7 +128,7 @@ export function CommandPaletteTrigger() {
 
           <CommandGroup heading="AI-native">
             {components
-              .filter((c) => c.category === "ai")
+              .filter((c) => c.category === "ai" && !isBlock(c))
               .map((c) => (
                 <CommandItem
                   key={c.slug}

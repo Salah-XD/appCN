@@ -187,7 +187,7 @@ function Header({ meta }: { meta: ComponentMeta }) {
       </Link>
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-3xl font-bold tracking-tight">{meta.title}</h1>
-        <CategoryBadge category={meta.category} />
+        <CategoryBadge meta={meta} />
         {badge ? (
           <Badge
             variant={badge === "new" ? "default" : "secondary"}
@@ -202,16 +202,23 @@ function Header({ meta }: { meta: ComponentMeta }) {
   );
 }
 
-function CategoryBadge({ category }: { category: ComponentMeta["category"] }) {
+function CategoryBadge({ meta }: { meta: ComponentMeta }) {
+  if (meta.kind === "block") {
+    return (
+      <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
+        Block
+      </span>
+    );
+  }
   return (
     <span
       className={
-        category === "ai"
+        meta.category === "ai"
           ? "rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground"
           : "rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-secondary-foreground"
       }
     >
-      {category === "ai" ? "AI" : "Base"}
+      {meta.category === "ai" ? "AI" : "Base"}
     </span>
   );
 }
