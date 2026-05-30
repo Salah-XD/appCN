@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { components, type ComponentEntry } from "@/lib/registry";
+import { components, isBlock, type ComponentEntry } from "@/lib/registry";
 
 export const metadata = {
   title: "Components — appCN",
@@ -9,8 +9,9 @@ export const metadata = {
 };
 
 export default function ComponentsIndex() {
-  const base = components.filter((c) => c.category === "base");
-  const ai = components.filter((c) => c.category === "ai");
+  const base = components.filter((c) => c.category === "base" && !isBlock(c));
+  const ai = components.filter((c) => c.category === "ai" && !isBlock(c));
+  const blockItems = components.filter(isBlock);
 
   return (
     <main className="space-y-12">
@@ -22,6 +23,7 @@ export default function ComponentsIndex() {
         </p>
       </header>
 
+      <Section title="Blocks" items={blockItems} accent />
       <Section title="Base" items={base} />
       <Section title="AI-native" items={ai} accent />
     </main>

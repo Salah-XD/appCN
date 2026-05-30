@@ -39,6 +39,13 @@ export interface ComponentMeta {
   title: string;
   /** "base" for the broad mobile library, "ai" for the featured AI collection. */
   category: "base" | "ai";
+  /**
+   * "primitive" (the default when omitted) for single-purpose components;
+   * "block" for composite, drop-in screens assembled from primitives (the
+   * marketed "blocks"). Blocks are surfaced in their own section, separate
+   * from the primitive component lists.
+   */
+  kind?: "primitive" | "block";
   /** One-line description used in cards, headers, and meta tags. */
   description: string;
   /** 2–4 sentences: what the component is made of and when to reach for it. */
@@ -69,3 +76,4 @@ export { meta as streamBubbleMeta } from "../ai/stream-bubble.meta";
 export { meta as promptInputMeta } from "../ai/prompt-input.meta";
 export { meta as reasoningTraceMeta } from "../ai/reasoning-trace.meta";
 export { meta as voiceSphereMeta } from "../ai/voice-sphere.meta";
+export { meta as chatMeta } from "../ai/chat.meta";

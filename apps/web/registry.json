@@ -124,6 +124,32 @@
           "target": "components/ui/voice-sphere.tsx"
         }
       ]
+    },
+    {
+      "name": "chat",
+      "type": "registry:component",
+      "title": "Chat",
+      "description": "The AI chat block: streaming assistant bubbles, a docked composer, inline reasoning, starter prompts, and magnetic stream-follow.",
+      "dependencies": [
+        "react-native-reanimated",
+        "react-native-safe-area-context",
+        "expo-clipboard"
+      ],
+      "registryDependencies": [
+        "@app-cn/cn",
+        "@app-cn/motion",
+        "@app-cn/haptics",
+        "@app-cn/stream-bubble",
+        "@app-cn/prompt-input",
+        "@app-cn/reasoning-trace"
+      ],
+      "files": [
+        {
+          "path": "../../packages/ui/src/ai/chat.tsx",
+          "type": "registry:component",
+          "target": "components/ui/chat.tsx"
+        }
+      ]
     }
   ]
 }

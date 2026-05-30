@@ -13,6 +13,9 @@ export type { ReasoningTraceProps } from "./ai/reasoning-trace";
 export { VoiceSphere } from "./ai/voice-sphere";
 export type { VoiceSphereProps } from "./ai/voice-sphere";
 
+export { Chat } from "./ai/chat";
+export type { ChatProps, ChatMessage, ChatRole, ChatStatus } from "./ai/chat";
+
 export { cn } from "./lib/cn";
 export { duration, easing, spring, PRESS_SCALE } from "./lib/motion";
 export { haptic } from "./lib/haptics";
@@ -24,4 +27,5 @@ export {
   promptInputMeta,
   reasoningTraceMeta,
   voiceSphereMeta,
+  chatMeta,
 } from "./lib/meta";

@@ -59,6 +59,12 @@ export interface StreamBubbleProps {
   speed?: number;
   /** Change this value to replay the animation from the start. */
   replayKey?: string | number;
+  /**
+   * When false, the bubble renders its settled "done" state immediately — no
+   * thinking dots, no token reveal, no settle pulse. Use for already-finished
+   * messages (e.g. chat history) so they don't re-animate on mount/scroll.
+   */
+  animate?: boolean;
   className?: string;
 }
 
@@ -77,6 +83,7 @@ export function StreamBubble({
   chunkSize = 2,
   speed = 28,
   replayKey,
+  animate = true,
   className,
 }: StreamBubbleProps) {
   const reduced = useReducedMotion();
@@ -84,7 +91,7 @@ export function StreamBubble({
   const [shown, setShown] = React.useState(0);
 
   React.useEffect(() => {
-    if (reduced) {
+    if (reduced || !animate) {
       setPhase("done");
       setShown(content.length);
       return;
@@ -93,7 +100,7 @@ export function StreamBubble({
     setShown(0);
     const t = setTimeout(() => setPhase("streaming"), thinkingDuration);
     return () => clearTimeout(t);
-  }, [content, thinkingDuration, replayKey, reduced]);
+  }, [content, thinkingDuration, replayKey, reduced, animate]);
 
   React.useEffect(() => {
     if (phase !== "streaming") return;
@@ -126,6 +133,7 @@ export function StreamBubble({
         tools={tools}
         content={content}
         shown={shown}
+        animate={animate}
         className={className}
       />
     </View>
@@ -141,18 +149,20 @@ function Bubble({
   tools,
   content,
   shown,
+  animate,
   className,
 }: {
   phase: Phase;
   tools?: string[];
   content: string;
   shown: number;
+  animate: boolean;
   className?: string;
 }) {
   // Settled-glow: when we transition to "done", briefly pulse a primary ring.
   const settle = useSharedValue(0);
   React.useEffect(() => {
-    if (phase === "done") {
+    if (phase === "done" && animate) {
       settle.value = withSequence(
         withTiming(1, { duration: duration.base, easing: easing.enter }),
         withTiming(0, { duration: 900, easing: easing.exit })
@@ -160,7 +170,7 @@ function Bubble({
     } else {
       settle.value = 0;
     }
-  }, [phase, settle]);
+  }, [phase, animate, settle]);
 
   const glowStyle = useAnimatedStyle(() => ({ opacity: settle.value }));
 
