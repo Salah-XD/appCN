@@ -1,5 +1,11 @@
 # @app-cn/mcp
 
+## 0.1.2
+
+### Patch Changes
+
+- [#8](https://github.com/Salah-XD/appCN/pull/8) [`8226ddb`](https://github.com/Salah-XD/appCN/commit/8226ddbc0a24f06df5836bcd758287194073a82c) Thanks [@Salah-XD](https://github.com/Salah-XD)! - Report the MCP server version from `package.json` instead of a hardcoded constant, so `serverInfo.version` (and the `server.json` the registry publishes) never drifts from the published npm version.
+
 ## 0.1.1
 
 ### Patch Changes
