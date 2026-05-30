@@ -1,5 +1,6 @@
 import {
   buttonMeta,
+  chatMeta,
   promptInputMeta,
   reasoningTraceMeta,
   streamBubbleMeta,
@@ -68,6 +69,15 @@ export const components: ComponentEntry[] = [
     sourcePath: "../../packages/ui/src/ai/voice-sphere.tsx",
     registryItem: "voice-sphere",
     meta: voiceSphereMeta,
+  },
+  {
+    slug: "chat",
+    title: chatMeta.title,
+    description: chatMeta.description,
+    category: chatMeta.category,
+    sourcePath: "../../packages/ui/src/ai/chat.tsx",
+    registryItem: "chat",
+    meta: chatMeta,
   },
 ];
 
