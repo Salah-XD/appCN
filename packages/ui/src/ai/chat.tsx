@@ -273,10 +273,14 @@ function UserBubble({
   return (
     <Animated.View
       entering={reduced ? undefined : FadeInDown.duration(duration.base).easing(easing.enter)}
-      accessibilityRole="text"
-      className="max-w-[82%] self-end rounded-2xl rounded-br-md bg-primary px-3.5 py-2.5"
+      style={{ alignSelf: "stretch", alignItems: "flex-end" }}
     >
-      <Text className="text-[15px] leading-5 text-primary-foreground">{content}</Text>
+      <View
+        accessibilityRole="text"
+        className="max-w-[82%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2.5"
+      >
+        <Text className="text-[15px] leading-5 text-primary-foreground">{content}</Text>
+      </View>
     </Animated.View>
   );
 }
