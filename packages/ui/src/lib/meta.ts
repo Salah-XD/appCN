@@ -69,3 +69,4 @@ export { meta as streamBubbleMeta } from "../ai/stream-bubble.meta";
 export { meta as promptInputMeta } from "../ai/prompt-input.meta";
 export { meta as reasoningTraceMeta } from "../ai/reasoning-trace.meta";
 export { meta as voiceSphereMeta } from "../ai/voice-sphere.meta";
+export { meta as chatMeta } from "../ai/chat.meta";
