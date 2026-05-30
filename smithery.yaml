@@ -1,0 +1,26 @@
+# Smithery configuration — https://smithery.ai/docs/config#smitheryyaml
+# appCN MCP server (@app-cn/mcp). Runs the published npm package over stdio,
+# so Smithery never has to build the monorepo.
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    additionalProperties: false
+    required: []
+    properties:
+      appcnRegistryUrl:
+        type: string
+        title: appCN registry URL
+        description: >-
+          Override the appCN registry base URL the server fetches from
+          (default https://appcn.vercel.app/r).
+  commandFunction: |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', '@app-cn/mcp'],
+      env: config.appcnRegistryUrl
+        ? { APPCN_REGISTRY_URL: config.appcnRegistryUrl }
+        : {}
+    })
+  exampleConfig:
+    appcnRegistryUrl: https://appcn.vercel.app/r
