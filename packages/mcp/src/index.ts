@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
@@ -8,8 +10,11 @@ import { registerGetInstallCommand } from "./tools/get-install-command";
 import { registerListComponents } from "./tools/list-components";
 import { registerSearchComponents } from "./tools/search-components";
 
-// Kept in sync with package.json manually (the CLI does the same).
-const SERVER_VERSION = "0.1.0";
+// Read straight from package.json so the reported version never drifts from the
+// published package (tsup bundles to dist/, package.json sits one level up).
+const SERVER_VERSION = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+).version as string;
 
 async function main() {
   const server = new McpServer({
