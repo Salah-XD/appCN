@@ -133,6 +133,7 @@ export function StreamBubble({
         tools={tools}
         content={content}
         shown={shown}
+        animate={animate}
         className={className}
       />
     </View>
@@ -148,18 +149,20 @@ function Bubble({
   tools,
   content,
   shown,
+  animate,
   className,
 }: {
   phase: Phase;
   tools?: string[];
   content: string;
   shown: number;
+  animate: boolean;
   className?: string;
 }) {
   // Settled-glow: when we transition to "done", briefly pulse a primary ring.
   const settle = useSharedValue(0);
   React.useEffect(() => {
-    if (phase === "done") {
+    if (phase === "done" && animate) {
       settle.value = withSequence(
         withTiming(1, { duration: duration.base, easing: easing.enter }),
         withTiming(0, { duration: 900, easing: easing.exit })
@@ -167,7 +170,7 @@ function Bubble({
     } else {
       settle.value = 0;
     }
-  }, [phase, settle]);
+  }, [phase, animate, settle]);
 
   const glowStyle = useAnimatedStyle(() => ({ opacity: settle.value }));
 
